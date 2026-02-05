@@ -161,7 +161,7 @@ const ListingsPage = () => {
           <div className="w-16 h-16 border-4 border-lime-100 border-t-lime-500 rounded-full animate-spin"></div>
         </div>
         <p className="mt-4 text-slate-500 font-medium animate-pulse">
-          Loading Montreal's finest...
+          Chargement en cours...
         </p>
       </div>
     );
