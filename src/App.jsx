@@ -198,7 +198,7 @@ const ListingsPage = () => {
             <div className="w-10 h-10 bg-lime-400 rounded-xl flex items-center justify-center text-slate-900 shadow-lg shadow-lime-100">
               <Home className="w-6 h-6" />
             </div>
-            <span className="text-xl font-black tracking-tight text-slate-800 uppercase">
+            <span className="text-xl font-brand font-black tracking-tight text-slate-800">
               Habitat Moderne inc.
             </span>
           </div>
