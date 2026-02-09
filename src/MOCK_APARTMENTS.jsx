@@ -1,0 +1,74 @@
+export const MOCK_APARTMENTS = [
+  {
+    id: 1,
+    name: "2 chambres et 1 salle de bain à Verdun",
+    price: 2100,
+    bedrooms: 2,
+    bathrooms: 1,
+    sqft: 950,
+    neighborhood: "Verdun",
+    image_url:
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80&w=800",
+    amenities: ["Balcon", "Plafonds hauts"],
+  },
+  {
+    id: 2,
+    name: "1 chambre et 1 salle de bain à Pointe-Saint-Charles",
+    price: 3200,
+    bedrooms: 1,
+    bathrooms: 1,
+    sqft: 1100,
+    neighborhood: "Pointe-Saint-Charles",
+    image_url:
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=800",
+    amenities: ["Gym", "Sécurité 24/7"],
+  },
+  {
+    id: 3,
+    name: "1 chambre et 1 salle de bain à LaSalle",
+    price: 1850,
+    bedrooms: 1,
+    bathrooms: 1,
+    sqft: 650,
+    neighborhood: "LaSalle",
+    image_url:
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80&w=800",
+    amenities: ["Piscine sur le toit", "Climatisation"],
+  },
+  {
+    id: 4,
+    name: "3 chambres et 2 salles de bain à LaSalle",
+    price: 4500,
+    bedrooms: 3,
+    bathrooms: 2,
+    sqft: 1800,
+    neighborhood: "LaSalle",
+    image_url:
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800",
+    amenities: ["Stationnement", "Vue sur l'eau"],
+  },
+  {
+    id: 5,
+    name: "2 chambres et 1 salle de bain à Verdun",
+    price: 1400,
+    bedrooms: 2,
+    bathrooms: 1,
+    sqft: 800,
+    neighborhood: "Verdun",
+    image_url:
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&q=80&w=800",
+    amenities: ["Vue sur le parc", "Animaux acceptés"],
+  },
+  {
+    id: 6,
+    name: "2 chambres et 1 salle de bain à Verdun",
+    price: 2450,
+    bedrooms: 2,
+    bathrooms: 1,
+    sqft: 1050,
+    neighborhood: "Verdun",
+    image_url:
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=800",
+    amenities: ["Planchers en bois franc", "Espace de bureau"],
+  },
+];
