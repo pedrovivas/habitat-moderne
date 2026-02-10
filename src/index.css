@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Elmore-Osf Regular';
+  src: url('./assets/fonts/Elmore-Osf Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 @import "tailwindcss";
 
 :root {
@@ -18,5 +25,5 @@ body {
 */
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui;
-  --font-brand: "Bradley Hand", "Bradley Hand ITC", cursive;
+  --font-brand: "Elmore-Osf Regular", cursive;
 }

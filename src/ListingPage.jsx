@@ -3,14 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import fetchApartments from "./fetchApartments";
 import {
   Search,
-  Home,
   Bed,
   Bath,
   Maximize,
   Filter,
   X,
   ChevronRight,
-  RefreshCw,
   AlertCircle,
 } from "lucide-react";
 
@@ -77,28 +75,6 @@ export default function ListingsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
-      {/* Navbar */}
-      <nav className="bg-white/80 backdrop-blur-md border-b sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-lime-400 rounded-xl flex items-center justify-center text-slate-900 shadow-lg shadow-lime-100">
-              <Home className="w-6 h-6" />
-            </div>
-            <span className="text-xl font-brand font-black tracking-tight text-slate-800">
-              Habitat Moderne inc.
-            </span>
-          </div>
-
-          <button
-            onClick={() => refetch()}
-            className={`p-2 rounded-full transition-all ${isFetching ? "animate-spin text-lime-600" : "text-slate-400 hover:bg-slate-100"}`}
-            title="Refresh Listings"
-          >
-            <RefreshCw size={20} />
-          </button>
-        </div>
-      </nav>
-
       <main className="max-w-7xl mx-auto px-6 pt-8">
         {/* Modern Filter Deck */}
         <div className="mb-10 space-y-4">

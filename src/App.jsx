@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ListingsPage from "./ListingPage";
+import Navbar from "./Navbar";
 
 // Initialize the Query Client
 const queryClient = new QueryClient({
@@ -14,6 +15,7 @@ const queryClient = new QueryClient({
 // Root Wrapper
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <Navbar />
     <ListingsPage />
   </QueryClientProvider>
 );
