@@ -1,22 +1,13 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import fetchApartments from "./fetchApartments";
-import {
-  Search,
-  Bed,
-  Bath,
-  Maximize,
-  Filter,
-  X,
-  ChevronRight,
-  AlertCircle,
-} from "lucide-react";
+import { Search, AlertCircle } from "lucide-react";
+import Apartment from "./Apartment";
+import ApartmentDetailModal from "./ApartmentDetailModal";
 
 export default function ListingsPage() {
-  const [filterArea, setFilterArea] = useState("All");
-  const [maxPrice, setMaxPrice] = useState(5000);
   const [selectedListing, setSelectedListing] = useState(null);
-    
+
   const {
     data: listings,
     isLoading,
@@ -29,14 +20,9 @@ export default function ListingsPage() {
     queryFn: fetchApartments,
   });
 
-  const filteredListings = useMemo(() => {
-    if (!listings) return [];
-    return listings.filter((item) => {
-      const matchArea = filterArea === "All" || item.area === filterArea;
-      const matchPrice = item.price <= maxPrice;
-      return matchArea && matchPrice;
-    });
-  }, [listings, filterArea, maxPrice]);
+  function handleApartmentClick(apartment) {
+    setSelectedListing(apartment);
+  }
 
   if (isLoading) {
     return (
@@ -76,231 +62,42 @@ export default function ListingsPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
       <main className="max-w-7xl mx-auto px-6 pt-8">
-        {/* Modern Filter Deck */}
         <div className="mb-10 space-y-4">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-1">
-              <h2 className="text-3xl font-bold text-slate-800 tracking-tight">
-                Appartements disponibles
-              </h2>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="bg-white border rounded-2xl px-4 py-2 flex items-center shadow-sm">
-                <Filter size={16} className="text-slate-400 mr-2" />
-                <select
-                  className="bg-transparent border-none text-sm font-semibold focus:ring-0 cursor-pointer"
-                  value={filterArea}
-                  onChange={(e) => setFilterArea(e.target.value)}
-                >
-                  <option value="All">Toutes les zones</option>
-                  <option value="Pointe-Saint-Charles">
-                    Pointe-Saint-Charles
-                  </option>
-                  <option value="LaSalle">LaSalle</option>
-                  <option value="Verdun">Verdun</option>
-                </select>
-              </div>
-
-              <div className="bg-white border rounded-2xl px-4 py-2 flex flex-col shadow-sm min-w-[200px]">
-                <label className="text-[10px] uppercase font-bold text-slate-400 mb-1">
-                  Budget maximum: ${maxPrice}
-                </label>
-                <input
-                  type="range"
-                  min="1000"
-                  max="5000"
-                  step="100"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(parseInt(e.target.value))}
-                  className="w-full accent-lime-500 h-1.5 rounded-lg appearance-none cursor-pointer bg-slate-100"
-                />
-              </div>
-            </div>
-          </div>
+          <h2 className="text-3xl font-bold text-slate-800 tracking-tight">
+            Appartements disponibles
+          </h2>
         </div>
 
-        {/* Dynamic Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredListings.map((apt) => (
-            <div
-              key={apt.id}
-              onClick={() => setSelectedListing(apt)}
-              className="group bg-white rounded-[2rem] overflow-hidden border border-slate-200 hover:border-lime-200 hover:shadow-2xl hover:shadow-lime-100/50 transition-all duration-500 cursor-pointer flex flex-col"
-            >
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  src={apt.image}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  alt={apt.title}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute top-4 left-4 bg-lime-400 px-3 py-1 rounded-full text-[10px] font-black uppercase text-slate-900 shadow-sm">
-                  {apt.area}
-                </div>
-              </div>
-
-              <div className="p-6 flex-grow flex flex-col">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-xl font-bold text-slate-800 leading-tight group-hover:text-lime-600 transition-colors">
-                    {apt.title}
-                  </h3>
-                  <div className="text-right">
-                    <p className="text-2xl font-black text-slate-800">
-                      ${apt.price}
-                    </p>
-                    <p className="text-xs text-slate-400 font-medium">
-                      per month
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4 text-slate-500 text-sm mt-auto pt-4 border-t border-slate-50">
-                  <span className="flex items-center font-medium">
-                    <Bed size={16} className="mr-1.5 text-lime-600" />{" "}
-                    {apt.beds}
-                  </span>
-                  <span className="flex items-center font-medium">
-                    <Bath size={16} className="mr-1.5 text-lime-600" />{" "}
-                    {apt.baths}
-                  </span>
-                  <span className="flex items-center font-medium">
-                    <Maximize size={16} className="mr-1.5 text-lime-600" />{" "}
-                    {apt.sqft} pi<sup>2</sup>
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
+          {listings &&
+            listings.map((apt) => (
+              <Apartment
+                key={apt.id}
+                apt={apt}
+                onApartmentClick={handleApartmentClick}
+              />
+            ))}
         </div>
 
-        {filteredListings.length === 0 && (
+        {listings.length === 0 && (
           <div className="bg-white rounded-[2rem] p-20 text-center border-2 border-dashed border-slate-200">
             <div className="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search size={32} />
             </div>
             <p className="text-lg text-slate-500 font-medium">
-              No matches found for this search.
+              Aucun logement disponible pour le moment.
             </p>
-            <button
-              onClick={() => {
-                setFilterArea("All");
-                setMaxPrice(5000);
-              }}
-              className="mt-4 px-6 py-2 bg-slate-800 text-white rounded-xl hover:bg-slate-900 transition-all text-sm font-bold"
-            >
-              Reset Filters
-            </button>
+            {/* Add contact form here */}
           </div>
         )}
       </main>
 
-      {/* Detail Modal Overlay */}
       {selectedListing && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
-          <div
-            className="absolute inset-0 bg-slate-900/40 backdrop-blur-md"
-            onClick={() => setSelectedListing(null)}
-          />
-          <div className="bg-white w-full max-w-5xl h-full max-h-[800px] rounded-[3rem] overflow-hidden shadow-2xl relative flex flex-col md:flex-row animate-in fade-in zoom-in slide-in-from-bottom-8 duration-300">
-            <div className="md:w-3/5 h-64 md:h-auto relative">
-              <img
-                src={selectedListing.image}
-                className="w-full h-full object-cover"
-                alt="Detail"
-              />
-              <div className="absolute top-6 left-6 md:hidden">
-                <button
-                  onClick={() => setSelectedListing(null)}
-                  className="p-3 bg-white rounded-full shadow-xl"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-            </div>
-
-            <div className="md:w-2/5 p-10 flex flex-col overflow-y-auto">
-              <div className="hidden md:flex justify-end mb-4">
-                <button
-                  onClick={() => setSelectedListing(null)}
-                  className="p-2 text-slate-300 hover:text-slate-600 transition-colors"
-                >
-                  <X size={28} />
-                </button>
-              </div>
-
-              <div className="flex-grow">
-                <span className="inline-block px-3 py-1 bg-lime-100 text-lime-700 rounded-lg text-xs font-black uppercase mb-4 tracking-widest">
-                  {selectedListing.area}
-                </span>
-                <h2 className="text-4xl font-black text-slate-800 mb-2 leading-tight">
-                  {selectedListing.title}
-                </h2>
-                <p className="text-3xl font-black text-lime-600 mb-8">
-                  ${selectedListing.price}
-                  <span className="text-sm font-bold text-slate-400">/mo</span>
-                </p>
-
-                <div className="grid grid-cols-3 gap-3 mb-10">
-                  <div className="border border-slate-100 p-4 rounded-2xl text-center">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">
-                      Chambres
-                    </p>
-                    <p className="text-xl font-black">{selectedListing.beds}</p>
-                  </div>
-                  <div className="border border-slate-100 p-4 rounded-2xl text-center">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">
-                      Bains
-                    </p>
-                    <p className="text-xl font-black">
-                      {selectedListing.baths}
-                    </p>
-                  </div>
-                  <div className="border border-slate-100 p-4 rounded-2xl text-center">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">
-                      Grandeur
-                    </p>
-                    <p className="text-xl font-black">{selectedListing.sqft}</p>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="font-bold text-slate-800 mb-2">
-                      Description
-                    </h4>
-                    <p className="text-slate-500 leading-relaxed text-sm">
-                      Appartements modernes et bien situés, offrant des espaces
-                      de vie lumineux et des équipements pratiques. Idéals pour
-                      tous types de locataires, ces appartements offrent confort
-                      et commodités à un prix compétitif.
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {selectedListing.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 bg-lime-50 border border-lime-100 rounded-lg text-xs font-semibold text-lime-700"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <button className="mt-10 w-full py-5 bg-lime-400 text-slate-900 rounded-2xl font-black hover:bg-lime-500 transition-all shadow-xl shadow-lime-100 flex items-center justify-center group">
-                Demande de location{" "}
-                <ChevronRight
-                  size={20}
-                  className="ml-2 group-hover:translate-x-1 transition-transform"
-                />
-              </button>
-            </div>
-          </div>
-        </div>
+        <ApartmentDetailModal
+          selectedListing={selectedListing}
+          onModalClick={handleApartmentClick}
+        />
       )}
     </div>
   );
-};
+}
