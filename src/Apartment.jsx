@@ -9,7 +9,7 @@ export default function Apartment({ apt, onApartmentClick }) {
     >
       <div className="relative h-64 overflow-hidden">
         <img
-          src={apt.image}
+          src={apt.images[0]}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           alt={apt.title}
         />

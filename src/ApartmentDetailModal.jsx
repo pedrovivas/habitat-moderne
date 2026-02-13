@@ -13,7 +13,7 @@ export default function ApartmentDetailModal({
       <div className="bg-white w-full max-w-5xl h-full max-h-[800px] rounded-[3rem] overflow-hidden shadow-2xl relative flex flex-col md:flex-row animate-in fade-in zoom-in slide-in-from-bottom-8 duration-300">
         <div className="md:w-3/5 h-64 md:h-auto relative">
           <img
-            src={selectedListing.image}
+            src={selectedListing.images[0]}
             className="w-full h-full object-cover"
             alt="Detail"
           />

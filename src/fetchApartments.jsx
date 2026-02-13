@@ -12,7 +12,7 @@ export default async function fetchApartments() {
           baths: item.bathrooms,
           sqft: item.sqft,
           area: item.neighborhood,
-          image: item.image_url,
+          images: item.images,
           tags: item.amenities || [],
         })),
       );
