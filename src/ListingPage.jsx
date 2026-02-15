@@ -4,6 +4,7 @@ import fetchApartments from "./fetchApartments";
 import { Search, AlertCircle } from "lucide-react";
 import Apartment from "./Apartment";
 import ApartmentDetailModal from "./ApartmentDetailModal";
+import {Link} from "react-router"
 
 export default function ListingsPage() {
   const [selectedListing, setSelectedListing] = useState(null);
@@ -71,11 +72,13 @@ export default function ListingsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {listings &&
             listings.map((apt) => (
-              <Apartment
-                key={apt.id}
-                apt={apt}
-                onApartmentClick={handleApartmentClick}
-              />
+              <Link to={`/apartment/${apt.id}`}>
+                <Apartment
+                  key={apt.id}
+                  apt={apt}
+                  onApartmentClick={handleApartmentClick}
+                />
+              </Link>
             ))}
         </div>
 
