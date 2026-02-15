@@ -1,10 +1,9 @@
 import { Bed, Bath, Maximize } from "lucide-react";
 
-export default function Apartment({ apt, onApartmentClick }) {
+export default function Apartment({ apt }) {
   return (
     <div
       key={apt.id}
-      onClick={() => onApartmentClick(apt)}
       className="group bg-white rounded-[2rem] overflow-hidden border border-slate-200 hover:border-lime-200 hover:shadow-2xl hover:shadow-lime-100/50 transition-all duration-500 cursor-pointer flex flex-col"
     >
       <div className="relative h-64 overflow-hidden">

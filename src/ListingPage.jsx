@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import fetchApartments from "./fetchApartments";
 import { Search, AlertCircle } from "lucide-react";
@@ -65,11 +64,8 @@ export default function ListingsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {listings &&
             listings.map((apt) => (
-              <Link to={`/apartment/${apt.id}`}>
-                <Apartment
-                  key={apt.id}
-                  apt={apt}
-                />
+              <Link key={apt.id} to={`/apartment/${apt.id}`}>
+                <Apartment apt={apt} />
               </Link>
             ))}
         </div>

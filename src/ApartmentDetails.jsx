@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import {
   ArrowLeft,
@@ -13,16 +13,49 @@ import {
   Phone,
   Mail,
 } from "lucide-react";
+import fetchApartments from "./fetchApartments"; // Assuming this is your fetch function
 
 export default function ApartmentDetails() {
   const { id } = useParams();
   const queryClient = useQueryClient();
+
+  // Try to get apartments from the cache
   const apartments = queryClient.getQueryData(["apartments"]);
-  const apartment = apartments?.find((apt) => apt.id === Number(id));
+
+  // If not found in cache, refetch the apartments
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["apartments"],
+    queryFn: fetchApartments,
+    enabled: !apartments, // only refetch if not in cache
+  });
+
+  // Use the cache if available, otherwise use the newly fetched data
+  const apartment =
+    apartments?.find((apt) => apt.id === Number(id)) ||
+    data?.find((apt) => apt.id === Number(id));
+
   const [activeImgIndex, setActiveImgIndex] = useState(0);
 
-  //if (!apartment) return null;
+  // Loading State
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50">
+        <div className="relative">
+          <div className="w-16 h-16 border-4 border-lime-100 border-t-lime-500 rounded-full animate-spin"></div>
+        </div>
+        <p className="mt-4 text-slate-500 font-medium animate-pulse">
+          Chargement en cours...
+        </p>
+      </div>
+    );
+  }
 
+  // Error State
+  if (isError || !apartment) {
+    return <p>Error loading apartment details or apartment not found.</p>;
+  }
+
+  // Next/Previous Image Functions
   function nextImg() {
     setActiveImgIndex((prev) => (prev + 1) % apartment.images.length);
   }
@@ -35,7 +68,11 @@ export default function ApartmentDetails() {
 
   return (
     <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
-      <Link to="/" className="flex items-center gap-2 text-slate-600 hover:text-lime-600 transition font-medium group">
+      {/* Back Link */}
+      <Link
+        to="/"
+        className="flex items-center gap-2 text-slate-600 hover:text-lime-600 transition font-medium group"
+      >
         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition" />
         Retour à la liste
       </Link>
@@ -43,6 +80,7 @@ export default function ApartmentDetails() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2 space-y-8">
           <div className="space-y-4">
+            {/* Main Image Section */}
             <div className="relative rounded-3xl overflow-hidden h-[500px] group bg-slate-200 shadow-inner">
               <img
                 src={apartment.images[activeImgIndex]}
@@ -69,6 +107,7 @@ export default function ApartmentDetails() {
               </button>
             </div>
 
+            {/* Image Thumbnails */}
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {apartment.images.map((img, idx) => (
                 <button
@@ -86,6 +125,7 @@ export default function ApartmentDetails() {
             </div>
           </div>
 
+          {/* Apartment Details Section */}
           <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
               <div className="space-y-2">
@@ -108,6 +148,7 @@ export default function ApartmentDetails() {
               </div>
             </div>
 
+            {/* Bedroom, Bathroom, and Size Info */}
             <div className="grid grid-cols-3 gap-4 py-6 border-y border-slate-200">
               <div className="flex flex-col items-center text-center gap-1">
                 <Bed className="w-6 h-6 text-lime-600" />
@@ -125,6 +166,7 @@ export default function ApartmentDetails() {
               </div>
             </div>
 
+            {/* Apartment Description */}
             <div className="space-y-4">
               <h2 className="text-2xl font-bold">À propos de ce logement</h2>
               <p className="text-slate-600 leading-relaxed text-lg">
@@ -153,6 +195,7 @@ export default function ApartmentDetails() {
           </div>
         </div>
 
+        {/* Contact Form Section */}
         <div className="lg:col-span-1">
           <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 sticky top-24 space-y-8">
             <div className="space-y-2 text-center">
