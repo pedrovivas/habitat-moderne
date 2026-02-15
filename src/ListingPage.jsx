@@ -3,12 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import fetchApartments from "./fetchApartments";
 import { Search, AlertCircle } from "lucide-react";
 import Apartment from "./Apartment";
-import ApartmentDetailModal from "./ApartmentDetailModal";
 import {Link} from "react-router"
 
 export default function ListingsPage() {
-  const [selectedListing, setSelectedListing] = useState(null);
-
   const {
     data: listings,
     isLoading,
@@ -20,10 +17,6 @@ export default function ListingsPage() {
     queryKey: ["apartments"],
     queryFn: fetchApartments,
   });
-
-  function handleApartmentClick(apartment) {
-    setSelectedListing(apartment);
-  }
 
   if (isLoading) {
     return (
@@ -76,7 +69,6 @@ export default function ListingsPage() {
                 <Apartment
                   key={apt.id}
                   apt={apt}
-                  onApartmentClick={handleApartmentClick}
                 />
               </Link>
             ))}
@@ -94,13 +86,6 @@ export default function ListingsPage() {
           </div>
         )}
       </main>
-
-      {selectedListing && (
-        <ApartmentDetailModal
-          selectedListing={selectedListing}
-          onModalClick={handleApartmentClick}
-        />
-      )}
     </div>
   );
 }

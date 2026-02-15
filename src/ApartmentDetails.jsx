@@ -1,3 +1,5 @@
+import { useParams, Link } from "react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import {
   ArrowLeft,
@@ -9,30 +11,34 @@ import {
   Square,
   CheckCircle2,
   Phone,
-  Mail
+  Mail,
 } from "lucide-react";
 
-export default function ApartmentDetails({ apartment, onBack }) {
+export default function ApartmentDetails() {
+  const { id } = useParams();
+  const queryClient = useQueryClient();
+  const apartments = queryClient.getQueryData(["apartments"]);
+  const apartment = apartments?.find((apt) => apt.id === Number(id));
   const [activeImgIndex, setActiveImgIndex] = useState(0);
 
-  if (!apartment) return null;
+  //if (!apartment) return null;
 
-  const nextImg = () =>
+  function nextImg() {
     setActiveImgIndex((prev) => (prev + 1) % apartment.images.length);
-  const prevImg = () =>
+  }
+
+  function prevImg() {
     setActiveImgIndex(
       (prev) => (prev - 1 + apartment.images.length) % apartment.images.length,
     );
+  }
 
   return (
     <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
-      <button
-        onClick={onBack}
-        className="flex items-center gap-2 text-slate-600 hover:text-lime-600 transition font-medium group"
-      >
+      <Link to="/" className="flex items-center gap-2 text-slate-600 hover:text-lime-600 transition font-medium group">
         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition" />
         Retour à la liste
-      </button>
+      </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2 space-y-8">
