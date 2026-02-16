@@ -26,4 +26,7 @@ body {
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui;
   --font-brand: "Elmore-Osf Regular", cursive;
+  --color-primary: #b4d773;
+  --color-secondary: #9fcb5a;
+  --color-tertiary: #efffd2;
 }

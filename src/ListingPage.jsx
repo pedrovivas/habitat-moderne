@@ -21,7 +21,7 @@ export default function ListingsPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50">
         <div className="relative">
-          <div className="w-16 h-16 border-4 border-lime-100 border-t-lime-500 rounded-full animate-spin"></div>
+          <div className="w-16 h-16 border-4 border-slate-200 border-t-primary rounded-full animate-spin"></div>
         </div>
         <p className="mt-4 text-slate-500 font-medium animate-pulse">
           Chargement en cours...
@@ -43,7 +43,7 @@ export default function ListingsPage() {
           <p className="text-slate-500 mb-6">{error.message}</p>
           <button
             onClick={() => refetch()}
-            className="w-full py-3 bg-lime-400 text-slate-900 rounded-xl font-bold hover:bg-lime-500 transition-all"
+            className="w-full py-3 bg-primary text-slate-900 rounded-xl font-bold hover:bg-secondary transition-all"
           >
             Try Again
           </button>
