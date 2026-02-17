@@ -220,7 +220,7 @@ export default function ApartmentDetails() {
                   <input
                     type="text"
                     className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition"
-                    placeholder="Jean Dupont"
+                    placeholder="Votre nom complet"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -230,7 +230,7 @@ export default function ApartmentDetails() {
                   <input
                     type="email"
                     className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition"
-                    placeholder="jean@exemple.com"
+                    placeholder="Votre adresse courriel"
                   />
                 </div>
                 <div className="space-y-1.5">
