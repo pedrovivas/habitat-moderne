@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import HomePage from "./HomePage";
 import ListingsPage from "./ListingPage";
 import ApartmentDetails from "./ApartmentDetails";
+import ContactUs from "./ContactUs";
 import Navbar from "./Navbar";
 import { BrowserRouter, Routes, Route } from "react-router"
 
@@ -21,8 +23,10 @@ export default function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<ListingsPage />} />
-          <Route path="/apartment/:id" element={<ApartmentDetails />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/appartements" element={<ListingsPage />} />
+          <Route path="/appartement/:id" element={<ApartmentDetails />} />
+          <Route path="/nous-rejoindre" element={<ContactUs />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

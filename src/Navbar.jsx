@@ -20,10 +20,10 @@ export default function Navbar() {
             <Link to="/">Accueil</Link>
           </li>
           <li className="font-medium hover:opacity-75 text-lg">
-            <Link to="/">Nos appartements</Link>
+            <Link to="/appartements">Nos appartements</Link>
           </li>
           <li className="font-medium hover:opacity-75 text-lg">
-            <Link to="/">Nous rejoindre</Link>
+            <Link to="/nous-rejoindre">Nous rejoindre</Link>
           </li>
         </ul>
       </div>
