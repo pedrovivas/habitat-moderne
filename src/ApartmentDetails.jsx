@@ -9,12 +9,12 @@ import {
   Bed,
   Bath,
   Square,
-  CheckCircle2,
   Phone,
   Mail,
 } from "lucide-react";
 import fetchApartments from "./fetchApartments"; // Assuming this is your fetch function
 import formatAddress from "./formatAddress";
+import ApartmentDetailsTags from "./ApartmentDetailsTags";
 
 export default function ApartmentDetails() {
   const { id } = useParams();
@@ -189,20 +189,8 @@ export default function ApartmentDetails() {
                 </p>
               </div>
 
-              {/* <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Inclusions et commodités</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {apartment.amenities.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center gap-3 bg-slate-100/50 p-4 rounded-xl border border-slate-100"
-                  >
-                    <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
-                    <span className="font-medium text-slate-700">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div> */}
+              {/* Tags */}
+              {apartment.tags.length > 0 && <ApartmentDetailsTags apartment={apartment} />}
             </div>
           </div>
 

@@ -18,7 +18,7 @@ export const MOCK_APARTMENTS = [
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&q=80&w=800",
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800",
     ],
-    amenities: ["Balcon", "Plafonds hauts"],
+    tags: ["Gym", "Ascenseur"],
   },
   {
     id: 2,
@@ -39,7 +39,12 @@ export const MOCK_APARTMENTS = [
       "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=800",
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&q=80&w=800",
     ],
-    amenities: ["Gym", "Sécurité 24/7"],
+    tags: [
+      "Climatisation",
+      "Sécurité 24/7",
+      "Animaux acceptés",
+      "Stationnement extérieur",
+    ],
   },
   {
     id: 3,
@@ -60,7 +65,7 @@ export const MOCK_APARTMENTS = [
       "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=800",
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&q=80&w=800",
     ],
-    amenities: ["Piscine sur le toit", "Climatisation"],
+    tags: [],
   },
   {
     id: 4,
@@ -81,7 +86,7 @@ export const MOCK_APARTMENTS = [
       "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=800",
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&q=80&w=800",
     ],
-    amenities: ["Stationnement", "Vue sur l'eau"],
+    tags: ["Stationnement", "Four", "Réfrigérateur"],
   },
   {
     id: 5,
@@ -102,7 +107,12 @@ export const MOCK_APARTMENTS = [
       "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=800",
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800",
     ],
-    amenities: ["Vue sur le parc", "Animaux acceptés"],
+    tags: [
+      "Eau chaudennement",
+      "Four",
+      "Réfrigérateur",
+      "Animaux acceptés",
+    ],
   },
   {
     id: 6,
@@ -123,6 +133,6 @@ export const MOCK_APARTMENTS = [
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&q=80&w=800",
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800",
     ],
-    amenities: ["Planchers en bois franc", "Espace de bureau"],
+    tags: [],
   },
 ];

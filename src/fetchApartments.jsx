@@ -16,7 +16,7 @@ export default async function fetchApartments() {
           sqft: apartment.sqft,
           neighborhood: apartment.neighborhood,
           images: apartment.images,
-          tags: apartment.amenities || [],
+          tags: apartment.tags || [],
         })),
       );
     }, 800);
