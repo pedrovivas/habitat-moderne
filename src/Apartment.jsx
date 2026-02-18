@@ -20,14 +20,16 @@ export default function Apartment({ apartment }) {
       </div>
 
       <div className="p-6 flex-grow flex flex-col">
-        <div className="flex justify-between items-start mb-4">
+        <div className="mb-4">
+          <div className="mb-2">
+            <span className="text-2xl font-black text-slate-800">
+              ${apartment.price}
+            </span>
+            <span className="text-xs text-slate-400 font-medium"> / mois</span>
+          </div>
           <h3 className="text-xl font-bold text-slate-800 leading-tight group-hover:opacity-75 transition-colors">
             {apartment.title}
           </h3>
-          <div className="text-right">
-            <p className="text-2xl font-black text-slate-800">${apartment.price}</p>
-            <p className="text-xs text-slate-400 font-medium">per month</p>
-          </div>
         </div>
 
         <p className="text-slate-500 line-clamp-2 min-h-[3rem]">
@@ -42,7 +44,8 @@ export default function Apartment({ apartment }) {
             <Bath size={16} className="mr-1.5" /> {apartment.bathrooms}
           </span>
           <span className="flex items-center font-medium">
-            <Maximize size={16} className="mr-1.5" /> {apartment.sqft} pi<sup>2</sup>
+            <Maximize size={16} className="mr-1.5" /> {apartment.sqft} pi
+            <sup>2</sup>
           </span>
         </div>
       </div>
