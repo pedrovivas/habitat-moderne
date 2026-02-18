@@ -30,8 +30,8 @@ export default function Apartment({ apartment }) {
           </div>
         </div>
 
-        <p className="text-slate-500">
-          {formatAddress(apartment)}
+        <p className="text-slate-500 line-clamp-2 min-h-[3rem]">
+          {formatAddress(apartment, false)}
         </p>
 
         <div className="flex items-center gap-4 text-slate-500 text-sm mt-auto pt-4 border-t border-slate-50">
