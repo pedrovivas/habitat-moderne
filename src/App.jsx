@@ -4,7 +4,8 @@ import ListingsPage from "./ListingPage";
 import ApartmentDetails from "./ApartmentDetails";
 import ContactUs from "./ContactUs";
 import Navbar from "./Navbar";
-import { BrowserRouter, Routes, Route } from "react-router"
+import Footer from "./Footer";
+import { BrowserRouter, Routes, Route } from "react-router";
 
 // Initialize the Query Client
 const queryClient = new QueryClient({
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/appartement/:id" element={<ApartmentDetails />} />
           <Route path="/nous-rejoindre" element={<ContactUs />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </QueryClientProvider>
   );
