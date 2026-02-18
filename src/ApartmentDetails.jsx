@@ -14,6 +14,7 @@ import {
   Mail,
 } from "lucide-react";
 import fetchApartments from "./fetchApartments"; // Assuming this is your fetch function
+import formatAddress from "./formatAddress";
 
 export default function ApartmentDetails() {
   const { id } = useParams();
@@ -78,7 +79,7 @@ export default function ApartmentDetails() {
       <main className="max-w-7xl mx-auto px-6 pt-8">
         {/* Back Link */}
         <Link
-          to="/"
+          to="/appartements"
           className="flex items-center gap-2 text-slate-600 hover:text-secondary transition font-medium group mb-4"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition" />
@@ -92,7 +93,7 @@ export default function ApartmentDetails() {
               <div className="relative rounded-3xl overflow-hidden h-[500px] group bg-slate-200 shadow-inner">
                 <img
                   src={apartment.images[activeImgIndex]}
-                  alt={apartment.name}
+                  alt={apartment.title}
                   className="w-full h-full object-cover transition-all duration-500"
                 />
                 <button
@@ -141,11 +142,11 @@ export default function ApartmentDetails() {
                     Disponible maintenant
                   </span>
                   <h1 className="text-4xl font-extrabold text-slate-900">
-                    {apartment.name}
+                    {apartment.title}
                   </h1>
                   <p className="text-slate-500 text-xl flex items-center gap-2">
                     <MapPin className="w-5 h-5 text-secondary" />{" "}
-                    {apartment.neighborhood}, Montréal
+                    {formatAddress(apartment)}
                   </p>
                 </div>
                 <div className="text-4xl font-black">
