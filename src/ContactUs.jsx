@@ -6,9 +6,9 @@ export default function ContactUs() {
       <main className="max-w-7xl mx-auto px-6 pt-8 text-slate-600 leading-relaxed text-lg">
         <p>Personnes responsables :</p>
         <ul>
-          <li>Jean Chabot, Administrateur</li>
-          <li>Julie Forget, Adjointe à la location</li>
-          <li>Louise Martin, Adjointe administrative</li>
+          <li>Tél.: administration 514-761-7105</li>
+          <li>Tél.: location 514-769-2762</li>
+          <li>Télécopieur 514-761-0110</li>
         </ul>
         <a
           href="tel:5147617105"
@@ -22,9 +22,7 @@ export default function ContactUs() {
           className="flex items-center gap-1 hover:opacity-75 transition group"
         >
           <Mail className="w-5 h-5 group-hover:scale-110 transition" />
-          <span className="font-bold">
-            info@habitatmoderne.com
-          </span>
+          <span className="font-bold">info@habitatmoderne.com</span>
         </a>
       </main>
     </div>

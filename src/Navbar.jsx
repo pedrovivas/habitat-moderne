@@ -40,7 +40,7 @@ export default function Navbar() {
             <Link to="/appartements">Nos appartements</Link>
           </li>
           <li className="font-medium hover:opacity-75 text-lg">
-            <Link to="/nous-rejoindre">Nous rejoindre</Link>
+            <Link to="/nous-rejoindre">Nous joindre</Link>
           </li>
         </ul>
 
