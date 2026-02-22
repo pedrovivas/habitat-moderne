@@ -15,6 +15,7 @@ import {
 import fetchApartments from "./fetchApartments"; // Assuming this is your fetch function
 import formatAddress from "./formatAddress";
 import ApartmentDetailsTags from "./ApartmentDetailsTags";
+import Form from "./Form";
 
 export default function ApartmentDetails() {
   const { id } = useParams();
@@ -35,14 +36,14 @@ export default function ApartmentDetails() {
     apartments?.find((apt) => apt.id === Number(id)) ||
     data?.find((apt) => apt.id === Number(id));
 
-    const [activeImgIndex, setActiveImgIndex] = useState(0);
-    
-    useEffect(() => {
-        window.scrollTo({
-          top: 0,
-          left: 0
-        });
-    }, [])
+  const [activeImgIndex, setActiveImgIndex] = useState(0);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+    });
+  }, []);
 
   // Loading State
   if (isLoading) {
@@ -80,7 +81,7 @@ export default function ApartmentDetails() {
         {/* Back Link */}
         <Link
           to="/appartements"
-          className="flex items-center gap-2 text-slate-600 hover:text-secondary transition font-medium group mb-4"
+          className="inline-flex items-center gap-2 text-slate-600 hover:text-secondary transition font-medium group mb-4"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition" />
           Retour à la liste
@@ -190,67 +191,14 @@ export default function ApartmentDetails() {
               </div>
 
               {/* Tags */}
-              {apartment.tags.length > 0 && <ApartmentDetailsTags apartment={apartment} />}
+              {apartment.tags.length > 0 && (
+                <ApartmentDetailsTags apartment={apartment} />
+              )}
             </div>
           </div>
 
           {/* Contact Form Section */}
-          <div className="lg:col-span-1">
-            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 sticky top-24 space-y-8">
-              <div className="space-y-2 text-center">
-                <h3 className="text-xl font-bold">Intéressé par ce bien ?</h3>
-              </div>
-
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-400 uppercase ml-1">
-                    Nom complet
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition"
-                    placeholder="Votre nom complet"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-400 uppercase ml-1">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition"
-                    placeholder="Votre adresse courriel"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-400 uppercase ml-1">
-                    Message
-                  </label>
-                  <textarea
-                    rows="4"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition resize-none"
-                    placeholder="Bonjour, je souhaiterais planifier une visite..."
-                  ></textarea>
-                </div>
-                <button className="w-full bg-primary py-4 rounded-xl font-bold hover:bg-secondary transition active:scale-[0.98]">
-                  Contacter le propriétaire
-                </button>
-              </form>
-
-              <div className="pt-6 border-t border-slate-100 flex items-center justify-around text-slate-400">
-                <button className="flex flex-col items-center gap-1 hover:text-secondary transition group">
-                  <Phone className="w-5 h-5 group-hover:scale-110 transition" />
-                  <span className="text-[10px] uppercase font-bold">
-                    Appeler
-                  </span>
-                </button>
-                <button className="flex flex-col items-center gap-1 hover:text-secondary transition group">
-                  <Mail className="w-5 h-5 group-hover:scale-110 transition" />
-                  <span className="text-[10px] uppercase font-bold">Email</span>
-                </button>
-              </div>
-            </div>
-          </div>
+          <Form address={formatAddress(apartment, false)} />
         </div>
       </main>
     </div>
