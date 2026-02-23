@@ -16,10 +16,12 @@ import fetchApartments from "./fetchApartments"; // Assuming this is your fetch 
 import formatAddress from "./formatAddress";
 import ApartmentDetailsTags from "./ApartmentDetailsTags";
 import Form from "./Form";
+import MapModal from "./MapModal";
 
 export default function ApartmentDetails() {
   const { id } = useParams();
   const queryClient = useQueryClient();
+  const [isMapOpen, setIsMapOpen] = useState(false);
 
   // Try to get apartments from the cache
   const apartments = queryClient.getQueryData(["apartments"]);
@@ -145,10 +147,15 @@ export default function ApartmentDetails() {
                   <h1 className="text-4xl font-extrabold text-slate-900">
                     {apartment.title}
                   </h1>
-                  <p className="text-slate-500 text-xl flex items-center gap-2">
-                    <MapPin className="w-5 h-5 text-secondary" />{" "}
-                    {formatAddress(apartment)}
-                  </p>
+                  <button
+                    onClick={() => setIsMapOpen(true)}
+                    className="group text-slate-500 text-xl flex items-center gap-2 cursor-pointer transition"
+                  >
+                    <MapPin className="w-5 h-5 text-slate-600 group-hover:text-secondary transition" />
+                    <span className="group-hover:text-secondary transition">
+                      {formatAddress(apartment)}
+                    </span>
+                  </button>
                 </div>
                 <div className="text-4xl font-black">
                   {apartment.price} ${" "}
@@ -200,6 +207,12 @@ export default function ApartmentDetails() {
           {/* Contact Form Section */}
           <Form address={formatAddress(apartment, false)} />
         </div>
+
+        <MapModal
+          address={formatAddress(apartment)}
+          isOpen={isMapOpen}
+          onClose={() => setIsMapOpen(false)}
+        />
       </main>
     </div>
   );
