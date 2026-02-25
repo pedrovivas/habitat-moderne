@@ -4,12 +4,16 @@ import EmailInput from "./EmailInput";
 import FullNameInput from "./FullNameInput";
 import ContactMethodSelect from "./ContactMethodSelect";
 
-export default function Form({ address }) {
+export default function Form({
+  address,
+  showPhone = true,
+  showContactMethod = true,
+}) {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phone: "",
-    contactMethod: "",
+    contactMethod: showContactMethod ? "" : "email"
   });
 
   const fullnameId = useId();
@@ -51,14 +55,24 @@ export default function Form({ address }) {
       return;
     } */
 
-    console.log("Form submitted:", formData);
+    console.log(
+      "Form submitted:",
+      formData,
+      address
+        ? `Address: ${address}`
+        : "Merci de m’informer dès qu’un logement se libère.",
+    );
   }
 
   return (
     <div className="lg:col-span-1">
       <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 sticky top-24 space-y-8">
         <div className="space-y-2 text-center">
-          <h3 className="text-xl font-bold">Intéressé par ce bien ?</h3>
+          <h3 className="text-xl font-bold">
+            {address
+              ? "Intéressé par ce bien ?"
+              : "Soyez informé dès qu'un logement se libère"}
+          </h3>
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
@@ -75,23 +89,27 @@ export default function Form({ address }) {
             required={formData.contactMethod === "email"}
           />
 
-          <PhoneInput
-            id={phoneId}
-            value={formData.phone}
-            onChange={(val) => handleChange("phone", val)}
-            required={formData.contactMethod === "phone"}
-          />
+          {showPhone && (
+            <PhoneInput
+              id={phoneId}
+              value={formData.phone}
+              onChange={(val) => handleChange("phone", val)}
+              required={formData.contactMethod === "phone"}
+            />
+          )}
 
-          <ContactMethodSelect
-            id={contactMethodId}
-            value={formData.contactMethod}
-            onChange={(val) =>
-              setFormData((prev) => ({
-                ...prev,
-                contactMethod: val,
-              }))
-            }
-          />
+          {showContactMethod && (
+            <ContactMethodSelect
+              id={contactMethodId}
+              value={formData.contactMethod}
+              onChange={(val) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  contactMethod: val,
+                }))
+              }
+            />
+          )}
 
           {/* <div className="space-y-1.5">
             <label
@@ -109,7 +127,7 @@ export default function Form({ address }) {
             ></textarea>
           </div> */}
           <button className="w-full bg-primary mt-4 py-4 rounded-xl font-bold hover:bg-secondary transition active:scale-[0.98]">
-            Contacter le propriétaire
+            {address ? "Contacter le propriétaire" : "Contactez-nous"}
           </button>
         </form>
       </div>

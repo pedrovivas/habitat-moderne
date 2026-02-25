@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import fetchApartments from "./fetchApartments";
 import { Search, AlertCircle } from "lucide-react";
 import Apartment from "./Apartment";
+import Form from "./Form";
 import {Link} from "react-router"
 
 export default function ListingsPage() {
@@ -71,14 +72,14 @@ export default function ListingsPage() {
         </div>
 
         {listings.length === 0 && (
-          <div className="bg-white rounded-[2rem] p-20 text-center border-2 border-dashed border-slate-200">
+          <div className="bg-white rounded-[2rem] p-6 md:p-20 text-center border-2 border-dashed border-slate-200">
             <div className="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search size={32} />
             </div>
-            <p className="text-lg text-slate-500 font-medium">
+            <p className="text-lg text-slate-500 font-medium mb-6">
               Aucun logement disponible pour le moment.
             </p>
-            {/* Add contact form here */}
+            <Form showPhone={false} showContactMethod={false} />
           </div>
         )}
       </main>
