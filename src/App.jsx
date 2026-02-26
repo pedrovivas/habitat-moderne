@@ -26,7 +26,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/appartements" element={<ListingsPage />} />
-          <Route path="/appartement/:id" element={<ApartmentDetails />} />
+          <Route path="/appartements/:id" element={<ApartmentDetails />} />
           <Route path="/nous-rejoindre" element={<ContactUs />} />
         </Routes>
         <Footer />

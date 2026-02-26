@@ -65,7 +65,7 @@ export default function ListingsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {listings &&
             listings.map((apartment) => (
-              <Link key={apartment.id} to={`/appartement/${apartment.id}`}>
+              <Link key={apartment.id} to={`/appartements/${apartment.id}`}>
                 <Apartment apartment={apartment} />
               </Link>
             ))}

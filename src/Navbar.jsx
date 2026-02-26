@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -33,14 +33,36 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-6">
-          <li className="font-medium hover:opacity-75 text-lg">
-            <Link to="/">Accueil</Link>
+          <li className="font-medium text-lg">
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) =>
+                `${isActive ? "text-white" : "hover:opacity-75"}`
+              }
+            >
+              Accueil
+            </NavLink>
           </li>
-          <li className="font-medium hover:opacity-75 text-lg">
-            <Link to="/appartements">Nos appartements</Link>
+          <li className="font-medium text-lg">
+            <NavLink
+              to="/appartements"
+              className={({ isActive }) =>
+                `${isActive ? "text-white" : "hover:opacity-75"}`
+              }
+            >
+              Nos appartements
+            </NavLink>
           </li>
-          <li className="font-medium hover:opacity-75 text-lg">
-            <Link to="/nous-rejoindre">Nous joindre</Link>
+          <li className="font-medium text-lg">
+            <NavLink
+              to="/nous-rejoindre"
+              className={({ isActive }) =>
+                `${isActive ? "text-white" : "hover:opacity-75"}`
+              }
+            >
+              Nous joindre
+            </NavLink>
           </li>
         </ul>
 
@@ -60,32 +82,32 @@ export default function Navbar() {
         }`}
       >
         <ul className="flex flex-col px-6 py-4 gap-4">
-          <li>
-            <Link
+          <li className="block text-lg font-medium">
+            <NavLink
               to="/"
               onClick={closeMenu}
-              className="block text-lg font-medium hover:opacity-75"
+              className={({ isActive }) => `${isActive && "text-white"}`}
             >
               Accueil
-            </Link>
+            </NavLink>
           </li>
-          <li>
-            <Link
+          <li className="block text-lg font-medium">
+            <NavLink
               to="/appartements"
               onClick={closeMenu}
-              className="block text-lg font-medium hover:opacity-75"
+              className={({ isActive }) => `${isActive && "text-white"}`}
             >
               Nos appartements
-            </Link>
+            </NavLink>
           </li>
-          <li>
-            <Link
+          <li className="block text-lg font-medium">
+            <NavLink
               to="/nous-rejoindre"
               onClick={closeMenu}
-              className="block text-lg font-medium hover:opacity-75"
+              className={({ isActive }) => `${isActive && "text-white"}`}
             >
               Nous rejoindre
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </div>
