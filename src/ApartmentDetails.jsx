@@ -3,14 +3,10 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import {
   ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
   MapPin,
   Bed,
   Bath,
-  Square,
-  Phone,
-  Mail,
+  Square
 } from "lucide-react";
 import fetchApartments from "./fetchApartments"; // Assuming this is your fetch function
 import formatAddress from "./formatAddress";
@@ -18,10 +14,19 @@ import ApartmentDetailsTags from "./ApartmentDetailsTags";
 import Form from "./Form";
 import MapModal from "./MapModal";
 
+// Swiper Imports
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Thumbs, FreeMode, Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/thumbs";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+
 export default function ApartmentDetails() {
   const { id } = useParams();
   const queryClient = useQueryClient();
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   // Try to get apartments from the cache
   const apartments = queryClient.getQueryData(["apartments"]);
@@ -37,8 +42,6 @@ export default function ApartmentDetails() {
   const apartment =
     apartments?.find((apt) => apt.id === Number(id)) ||
     data?.find((apt) => apt.id === Number(id));
-
-  const [activeImgIndex, setActiveImgIndex] = useState(0);
 
   useEffect(() => {
     window.scrollTo({
@@ -66,17 +69,6 @@ export default function ApartmentDetails() {
     return <p>Error loading apartment details or apartment not found.</p>;
   }
 
-  // Next/Previous Image Functions
-  function nextImg() {
-    setActiveImgIndex((prev) => (prev + 1) % apartment.images.length);
-  }
-
-  function prevImg() {
-    setActiveImgIndex(
-      (prev) => (prev - 1 + apartment.images.length) % apartment.images.length,
-    );
-  }
-
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
       <main className="max-w-7xl mx-auto px-6 pt-8">
@@ -92,49 +84,57 @@ export default function ApartmentDetails() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           <div className="lg:col-span-2 space-y-8">
             <div className="space-y-4">
-              {/* Main Image Section */}
-              <div className="relative rounded-3xl overflow-hidden h-[500px] group bg-slate-200 shadow-inner">
-                <img
-                  src={apartment.images[activeImgIndex]}
-                  alt={apartment.title}
-                  className="w-full h-full object-cover transition-all duration-500"
-                />
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    prevImg();
-                  }}
-                  className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/90 p-3 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition hover:bg-white hover:text-secondary"
-                >
-                  <ChevronLeft className="w-6 h-6" />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    nextImg();
-                  }}
-                  className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/90 p-3 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition hover:bg-white hover:text-secondary"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
-              </div>
-
-              {/* Image Thumbnails */}
-              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+              {/* Main Large Swiper */}
+              <Swiper
+                style={{
+                  "--swiper-navigation-color": "#fff",
+                  "--swiper-pagination-color": "#fff",
+                }}
+                spaceBetween={10}
+                navigation={true}
+                thumbs={{
+                  swiper:
+                    thumbsSwiper && !thumbsSwiper.destroyed
+                      ? thumbsSwiper
+                      : null,
+                }}
+                modules={[FreeMode, Navigation, Thumbs]}
+                className="h-[500px] rounded-3xl overflow-hidden shadow-xl"
+              >
                 {apartment.images.map((img, idx) => (
-                  <button
+                  <SwiperSlide key={idx}>
+                    <img
+                      src={img}
+                      className="w-full h-full object-cover"
+                      alt={apartment.title}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+
+              {/* Thumbnails Swiper */}
+              <Swiper
+                onSwiper={setThumbsSwiper}
+                spaceBetween={12}
+                slidesPerView={4}
+                freeMode={true}
+                watchSlidesProgress={true}
+                modules={[FreeMode, Navigation, Thumbs]}
+                className="h-24"
+              >
+                {apartment.images.map((img, idx) => (
+                  <SwiperSlide
                     key={idx}
-                    onClick={() => setActiveImgIndex(idx)}
-                    className={`relative flex-shrink-0 w-28 h-20 rounded-xl overflow-hidden border-2 transition-all ${activeImgIndex === idx ? "border-primary scale-95 shadow-md" : "border-transparent opacity-60 hover:opacity-100"}`}
+                    className="rounded-xl overflow-hidden border-2 border-transparent cursor-pointer [.swiper-slide-thumb-active_&]:border-primary"
                   >
                     <img
                       src={img}
                       className="w-full h-full object-cover"
-                      alt={`Miniature ${idx + 1}`}
+                      alt="thumbnail"
                     />
-                  </button>
+                  </SwiperSlide>
                 ))}
-              </div>
+              </Swiper>
             </div>
 
             {/* Apartment Details Section */}
