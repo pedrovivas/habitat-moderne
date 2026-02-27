@@ -13,20 +13,12 @@ import formatAddress from "./formatAddress";
 import ApartmentDetailsTags from "./ApartmentDetailsTags";
 import Form from "./Form";
 import MapModal from "./MapModal";
-
-// Swiper Imports
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Thumbs, FreeMode, Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/thumbs";
-import "swiper/css/free-mode";
-import "swiper/css/navigation";
+import ImageGallery from "./ImageGallery";
 
 export default function ApartmentDetails() {
   const { id } = useParams();
   const queryClient = useQueryClient();
   const [isMapOpen, setIsMapOpen] = useState(false);
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   // Try to get apartments from the cache
   const apartments = queryClient.getQueryData(["apartments"]);
@@ -84,57 +76,7 @@ export default function ApartmentDetails() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           <div className="lg:col-span-2 space-y-8">
             <div className="space-y-4">
-              {/* Main Large Swiper */}
-              <Swiper
-                style={{
-                  "--swiper-navigation-color": "#fff",
-                  "--swiper-pagination-color": "#fff",
-                }}
-                spaceBetween={10}
-                navigation={true}
-                thumbs={{
-                  swiper:
-                    thumbsSwiper && !thumbsSwiper.destroyed
-                      ? thumbsSwiper
-                      : null,
-                }}
-                modules={[FreeMode, Navigation, Thumbs]}
-                className="h-[500px] rounded-3xl overflow-hidden shadow-xl"
-              >
-                {apartment.images.map((img, idx) => (
-                  <SwiperSlide key={idx}>
-                    <img
-                      src={img}
-                      className="w-full h-full object-cover"
-                      alt={apartment.title}
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-
-              {/* Thumbnails Swiper */}
-              <Swiper
-                onSwiper={setThumbsSwiper}
-                spaceBetween={12}
-                slidesPerView={4}
-                freeMode={true}
-                watchSlidesProgress={true}
-                modules={[FreeMode, Navigation, Thumbs]}
-                className="h-24"
-              >
-                {apartment.images.map((img, idx) => (
-                  <SwiperSlide
-                    key={idx}
-                    className="rounded-xl overflow-hidden border-2 border-transparent cursor-pointer [.swiper-slide-thumb-active_&]:border-primary"
-                  >
-                    <img
-                      src={img}
-                      className="w-full h-full object-cover"
-                      alt="thumbnail"
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+              <ImageGallery apartment={apartment} />
             </div>
 
             {/* Apartment Details Section */}
