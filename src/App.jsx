@@ -5,6 +5,7 @@ import ApartmentDetails from "./ApartmentDetails";
 import ContactUs from "./ContactUs";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import PrivacyPolicy from "./PrivacyPolicy";
 import { BrowserRouter, Routes, Route } from "react-router";
 
 // Initialize the Query Client
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/appartements" element={<ListingsPage />} />
           <Route path="/appartements/:id" element={<ApartmentDetails />} />
           <Route path="/nous-rejoindre" element={<ContactUs />} />
+          <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
         </Routes>
         <Footer />
       </BrowserRouter>
