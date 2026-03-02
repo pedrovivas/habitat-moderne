@@ -126,7 +126,7 @@ export default function Form({
               placeholder="Bonjour, je souhaiterais planifier une visite..."
             ></textarea>
           </div> */}
-          <button className="w-full bg-primary mt-4 py-4 rounded-xl font-bold hover:bg-secondary transition active:scale-[0.98]">
+          <button className="w-full bg-primary mt-4 py-4 rounded-xl font-bold shadow-md hover:bg-secondary transition active:scale-[0.98]">
             {address ? "Contacter le propriétaire" : "Contactez-nous"}
           </button>
         </form>
