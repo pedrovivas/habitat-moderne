@@ -128,16 +128,14 @@ export default function ApartmentDetails() {
               </div>
 
               {/* Apartment Description */}
-              <div className="space-y-4">
-                <h2 className="text-2xl font-bold">À propos de ce logement</h2>
-                <p className="text-slate-600 leading-relaxed text-lg">
-                  Ce magnifique appartement situé à {apartment.neighborhood}{" "}
-                  offre un cadre de vie exceptionnel. L'espace a été conçu pour
-                  maximiser la lumière naturelle et offrir une fluidité moderne
-                  entre les pièces. Une opportunité rare dans l'un des secteurs
-                  les plus prisés de la ville.
-                </p>
-              </div>
+              {apartment.description && (
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold">À propos de ce logement</h2>
+                  <p className="text-slate-600 leading-relaxed text-lg">
+                    {apartment.description}
+                  </p>
+                </div>
+              )}
 
               {/* Tags */}
               {apartment.tags.length > 0 && (

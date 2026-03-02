@@ -11,6 +11,7 @@ export default async function fetchApartments() {
           unit: apartment.unit,
           postalCode: apartment.postal_code,
           price: apartment.price,
+          description: apartment.description,
           bedrooms: apartment.bedrooms,
           bathrooms: apartment.bathrooms,
           sqft: apartment.sqft,

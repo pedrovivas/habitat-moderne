@@ -6,6 +6,8 @@ export const MOCK_APARTMENTS = [
     unit: "12",
     postal_code: "X1X 1X1",
     price: 2100,
+    description:
+      "Ce magnifique appartement offre un cadre de vie exceptionnel. L'espace a été conçu pour maximiser la lumière naturelle et offrir une fluidité moderne entre les pièces. Une opportunité rare dans l'un des secteurs les plus prisés de la ville.",
     bedrooms: 2,
     bathrooms: 1,
     sqft: 950,
@@ -27,6 +29,8 @@ export const MOCK_APARTMENTS = [
     unit: "3",
     postal_code: "X1X 1X1",
     price: 3200,
+    description:
+      "Ce magnifique appartement offre un cadre de vie exceptionnel. L'espace a été conçu pour maximiser la lumière naturelle et offrir une fluidité moderne entre les pièces. Une opportunité rare dans l'un des secteurs les plus prisés de la ville.",
     bedrooms: 1,
     bathrooms: 1,
     sqft: 1100,
@@ -53,6 +57,8 @@ export const MOCK_APARTMENTS = [
     unit: "",
     postal_code: "X1X 1X1",
     price: 1850,
+    description:
+      "Ce magnifique appartement offre un cadre de vie exceptionnel. L'espace a été conçu pour maximiser la lumière naturelle et offrir une fluidité moderne entre les pièces. Une opportunité rare dans l'un des secteurs les plus prisés de la ville.",
     bedrooms: 1,
     bathrooms: 1,
     sqft: 650,
@@ -74,6 +80,8 @@ export const MOCK_APARTMENTS = [
     unit: "15",
     postal_code: "X1X 1X1",
     price: 4500,
+    description:
+      "Ce magnifique appartement offre un cadre de vie exceptionnel. L'espace a été conçu pour maximiser la lumière naturelle et offrir une fluidité moderne entre les pièces. Une opportunité rare dans l'un des secteurs les plus prisés de la ville.",
     bedrooms: 3,
     bathrooms: 2,
     sqft: 1800,
@@ -95,6 +103,8 @@ export const MOCK_APARTMENTS = [
     unit: "",
     postal_code: "X1X 1X1",
     price: 1400,
+    description:
+      "Ce magnifique appartement offre un cadre de vie exceptionnel. L'espace a été conçu pour maximiser la lumière naturelle et offrir une fluidité moderne entre les pièces. Une opportunité rare dans l'un des secteurs les plus prisés de la ville.",
     bedrooms: 2,
     bathrooms: 1,
     sqft: 800,
@@ -107,12 +117,7 @@ export const MOCK_APARTMENTS = [
       "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=800",
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800",
     ],
-    tags: [
-      "Eau chaudennement",
-      "Four",
-      "Réfrigérateur",
-      "Animaux acceptés",
-    ],
+    tags: ["Eau chaudennement", "Four", "Réfrigérateur", "Animaux acceptés"],
   },
   {
     id: 6,
@@ -121,6 +126,8 @@ export const MOCK_APARTMENTS = [
     unit: "",
     postal_code: "X1X 1X1",
     price: 2450,
+    description:
+      "Ce magnifique appartement offre un cadre de vie exceptionnel. L'espace a été conçu pour maximiser la lumière naturelle et offrir une fluidité moderne entre les pièces. Une opportunité rare dans l'un des secteurs les plus prisés de la ville.",
     bedrooms: 2,
     bathrooms: 1,
     sqft: 1050,
