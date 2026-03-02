@@ -44,9 +44,6 @@ export default function HomePage() {
 
             {/* CTA */}
             <div>
-              {/* <button className="w-auto bg-primary mt-4 py-4 rounded-xl font-bold shadow-md hover:bg-secondary transition active:scale-[0.98]">
-                Voir nos appartements
-              </button> */}
               <Link
                 to="/appartements"
                 className="inline-block text-center w-full md:w-auto mt-4 py-4 px-6 bg-primary rounded-xl font-bold shadow-md hover:bg-secondary transition active:scale-[0.98]"
