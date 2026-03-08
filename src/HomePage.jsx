@@ -27,14 +27,14 @@ export default function HomePage() {
             </p>
 
             <p>
-              Depuis le tout début de l'entreprise, nos bureaux sont situés au
-              3572, rue Wellington, à Verdun.
+              Depuis les débuts de l'entreprise, nos bureaux sont situés au
+              3572, rue Wellington à Verdun.
             </p>
 
             <p>
-              Une structure à taille humaine privilégiant la stabilité et
-              l'expérience de notre personnel administratif et de notre équipe
-              d'entretien vous offrent un service courtois et personnalisé.
+              Notre structure à taille humaine mise sur l'expérience de notre
+              équipe administrative et d'entretien pour vous offrir un service
+              courtois et personnalisé.
             </p>
 
             <p>
