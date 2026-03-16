@@ -1,5 +1,5 @@
 export default function formatAddress(
-  { address, unit, neighborhood, city = "Montréal" },
+    { address, unit, neighborhood, city = "" },
   showNeighborhood = true,
 ) {
 

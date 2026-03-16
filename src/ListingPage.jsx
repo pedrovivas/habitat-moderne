@@ -1,17 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
-import fetchApartments from "./fetchApartments";
+import fetchApartments from "../services/apartmentService";
 import { Search, AlertCircle } from "lucide-react";
 import Apartment from "./Apartment";
-import {Link} from "react-router"
+import { Link } from "react-router";
+import Form from "./Form";
 
 export default function ListingsPage() {
+  const isAdmin = localStorage.getItem("admin") === "true";
+
   const {
     data: listings,
     isLoading,
     isError,
     error,
     refetch,
-    isFetching,
   } = useQuery({
     queryKey: ["apartments"],
     queryFn: fetchApartments,
@@ -52,6 +54,10 @@ export default function ListingsPage() {
     );
   }
 
+  const filteredListings = listings?.filter(
+    (apt) => isAdmin || apt.visible
+  );
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
       <main className="max-w-7xl mx-auto px-6 pt-8">
@@ -62,25 +68,24 @@ export default function ListingsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {listings &&
-            listings.map((apartment) => (
+          {filteredListings && filteredListings.length > 0 ? (
+            filteredListings.map((apartment) => (
               <Link key={apartment.id} to={`/appartement/${apartment.id}`}>
-                <Apartment apartment={apartment} />
+                <Apartment apartment={apartment} isAdmin={isAdmin} />
               </Link>
-            ))}
-        </div>
-
-        {listings.length === 0 && (
-          <div className="bg-white rounded-[2rem] p-20 text-center border-2 border-dashed border-slate-200">
-            <div className="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search size={32} />
+            ))
+          ) : (
+            <div className="bg-white rounded-[2rem] p-6 md:p-20 text-center border-2 border-dashed border-slate-200 col-span-full">
+              <div className="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search size={32} />
+              </div>
+              <p className="text-lg text-slate-500 font-medium mb-6">
+                Aucun logement disponible pour le moment.
+              </p>
+              <Form showPhone={false} showContactMethod={false} />
             </div>
-            <p className="text-lg text-slate-500 font-medium">
-              Aucun logement disponible pour le moment.
-            </p>
-            {/* Add contact form here */}
-          </div>
-        )}
+          )}
+        </div>
       </main>
     </div>
   );
