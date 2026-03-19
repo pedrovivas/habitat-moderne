@@ -62,7 +62,7 @@ export default function Navbar() {
             <Link to="/nous-rejoindre">Nous joindre</Link>
           </li>
 
-          <li>
+          {/* <li>
             <select
               value={lang}
               onChange={handleChangeLang}
@@ -71,7 +71,7 @@ export default function Navbar() {
               <option value="fr">Français</option>
               <option value="en">English</option>
             </select>
-          </li>
+          </li> */}
         </ul>
 
         <button
@@ -106,7 +106,7 @@ export default function Navbar() {
             </Link>
           </li>
 
-          <li>
+          {/* <li>
             <select
               value={lang}
               onChange={handleChangeLang}
@@ -115,7 +115,7 @@ export default function Navbar() {
               <option value="fr">Français</option>
               <option value="en">English</option>
             </select>
-          </li>
+          </li> */}
 
           <li>
             {!isAuthenticated ? (
