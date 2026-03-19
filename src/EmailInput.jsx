@@ -43,10 +43,6 @@ export default function EmailInput({ id, value, onChange, required }) {
           Veuillez entrer une adresse courriel valide.
         </p>
       )}
-
-      {/* {showValid && (
-        <p className="text-xs text-green-600 ml-1">Adresse valide ✓</p>
-      )} */}
     </div>
   );
 }

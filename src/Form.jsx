@@ -13,14 +13,18 @@ export default function Form({
     fullName: "",
     email: "",
     phone: "",
-    contactMethod: showContactMethod ? "" : "email"
+    contactMethod: "",
+    message: "",
   });
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
 
   const fullnameId = useId();
   const emailId = useId();
   const phoneId = useId();
-  const infoId = useId();
   const contactMethodId = useId();
+
+  const isButtonDisabled = status === "sending";
 
   function handleChange(field, value) {
     setFormData((prev) => ({
@@ -29,50 +33,55 @@ export default function Form({
     }));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    /* const { fullName, email, phone, contactMethod } = formData;
-
-    // Basic validation
-    if (!fullName.trim()) {
-      alert("Le nom est requis.");
+    if (!formData.contactMethod) {
+      setError("Veuillez sélectionner une méthode de contact.");
       return;
+    } else {
+      setError("");
     }
 
-    if (!contactMethod) {
-      alert("Veuillez choisir une méthode de contact.");
-      return;
+    setStatus("sending");
+
+    try {
+      const res = await fetch("http://localhost:5000/api/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) throw new Error("Erreur lors de l'envoi de l'email");
+
+      setStatus("success");
+
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        contactMethod: "",
+        message: "",
+      });
+
+      setTimeout(() => setStatus("idle"), 4000);
+    } catch (err) {
+      console.error(err);
+      alert("Erreur : impossible d'envoyer l'email.");
+      setStatus("idle");
     }
-
-    if (contactMethod === "email" && !email) {
-      alert("Le courriel est requis.");
-      return;
-    }
-
-    if (contactMethod === "phone" && !phone) {
-      alert("Le téléphone est requis.");
-      return;
-    } */
-
-    console.log(
-      "Form submitted:",
-      formData,
-      address
-        ? `Address: ${address}`
-        : "Merci de m’informer dès qu’un logement se libère.",
-    );
   }
 
   return (
     <div className="lg:col-span-1">
-      <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 sticky top-24 space-y-8">
+      <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 sticky top-24 space-y-4">
         <div className="space-y-2 text-center">
-          <h3 className="text-xl font-bold">
-            {address
-              ? "Intéressé par ce bien ?"
-              : "Soyez informé dès qu'un logement se libère"}
-          </h3>
+          <h3 className="text-xl font-bold">Intéressé par ce bien ?</h3>
+          {status === "success" && (
+            <p className="text-green-600 font-semibold transition-opacity duration-500">
+              Email envoyé au propriétaire !
+            </p>
+          )}
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
@@ -89,45 +98,32 @@ export default function Form({
             required={formData.contactMethod === "email"}
           />
 
-          {showPhone && (
-            <PhoneInput
-              id={phoneId}
-              value={formData.phone}
-              onChange={(val) => handleChange("phone", val)}
-              required={formData.contactMethod === "phone"}
-            />
+          <PhoneInput
+            id={phoneId}
+            value={formData.phone}
+            onChange={(val) => handleChange("phone", val)}
+            required={formData.contactMethod === "phone"}
+          />
+
+          <ContactMethodSelect
+            id={contactMethodId}
+            value={formData.contactMethod}
+            onChange={(val) => handleChange("contactMethod", val)}
+          />
+          {error && (
+            <p className="text-red-500 text-xs ml-1 mt-1">{error}</p>
           )}
 
-          {showContactMethod && (
-            <ContactMethodSelect
-              id={contactMethodId}
-              value={formData.contactMethod}
-              onChange={(val) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  contactMethod: val,
-                }))
-              }
-            />
-          )}
-
-          {/* <div className="space-y-1.5">
-            <label
-              htmlFor={infoId}
-              className="text-xs font-bold text-slate-400 uppercase ml-1"
-            >
-              Message
-            </label>
-            <textarea
-              id={infoId}
-              rows="4"
-              name="info"
-              className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition resize-none"
-              placeholder="Bonjour, je souhaiterais planifier une visite..."
-            ></textarea>
-          </div> */}
-          <button className="w-full bg-primary mt-4 py-4 rounded-xl font-bold shadow-md hover:bg-secondary transition active:scale-[0.98]">
-            {address ? "Contacter le propriétaire" : "Contactez-nous"}
+          <button
+            type="submit"
+            disabled={isButtonDisabled}
+            className={`w-full mt-4 py-4 rounded-xl font-bold transition active:scale-[0.98] ${
+              isButtonDisabled
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-primary hover:bg-secondary"
+            }`}
+          >
+            {status === "sending" ? "Envoi..." : "Contacter le propriétaire"}
           </button>
         </form>
       </div>

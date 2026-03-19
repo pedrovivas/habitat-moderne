@@ -1,15 +1,24 @@
-import { Bed, Bath, Maximize } from "lucide-react";
+import { Bed, Bath, Maximize, Eye, EyeOff } from "lucide-react";
 import formatAddress from "./formatAddress";
 
 export default function Apartment({ apartment }) {
+  const isAdmin = localStorage.getItem("admin") === "true";
+
+  const images = Array.isArray(apartment.images)
+    ? apartment.images
+    : apartment.images
+    ? JSON.parse(apartment.images)
+    : [];
+
   return (
-    <div
-      key={apartment.id}
-      className="group bg-white rounded-[2rem] overflow-hidden border border-slate-200 hover:border-primary hover:shadow-2xl hover:shadow-slate-500/50 transition-all duration-500 cursor-pointer flex flex-col"
-    >
+    <div className="group bg-white rounded-[2rem] overflow-hidden border border-slate-200 hover:border-primary hover:shadow-2xl hover:shadow-slate-500/50 transition-all duration-500 cursor-pointer flex flex-col">
       <div className="relative h-64 overflow-hidden">
         <img
-          src={apartment.images[0]}
+          src={
+            images[0]
+              ? `http://localhost:5000/uploads/${images[0]}`
+              : "/placeholder.jpg"
+          }
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           alt={apartment.title}
         />
@@ -21,9 +30,14 @@ export default function Apartment({ apartment }) {
 
       <div className="p-6 flex-grow flex flex-col">
         <div className="mb-4">
+          <span className="inline-block py-1 mb-2 text-xs font-bold uppercase tracking-wider">
+            {/* Disponible maintenant */}
+            Disponible <i></i>
+            {apartment.availability || " maintenant"}
+          </span>
           <div className="mb-2">
             <span className="text-2xl font-black text-slate-800">
-              ${apartment.price}
+              {Math.floor(apartment.price)}{" "}$
             </span>
             <span className="text-xs text-slate-400 font-medium"> / mois</span>
           </div>
@@ -47,6 +61,18 @@ export default function Apartment({ apartment }) {
             <Maximize size={16} className="mr-1.5" /> {apartment.sqft} pi
             <sup>2</sup>
           </span>
+          {isAdmin && (
+            <span
+              title={apartment.visible ? "Visible sur le site" : "Non visible"}
+              className="ml-auto flex items-center"
+            >
+              {apartment.visible ? (
+                <Eye size={22} className="text-green-600" />
+              ) : (
+                <EyeOff size={22} className="text-red-500" />
+              )}
+            </span>
+          )}
         </div>
       </div>
     </div>

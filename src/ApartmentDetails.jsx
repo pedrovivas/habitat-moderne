@@ -1,92 +1,170 @@
-import { useParams, Link } from "react-router";
+import { useParams, Link, useNavigate } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import {
   ArrowLeft,
   MapPin,
   Bed,
   Bath,
-  Square
+  Square,
+  Edit,
+  Trash2,
 } from "lucide-react";
-import fetchApartments from "./fetchApartments"; // Assuming this is your fetch function
+
+import fetchApartments from "../services/apartmentService";
 import formatAddress from "./formatAddress";
 import ApartmentDetailsTags from "./ApartmentDetailsTags";
 import Form from "./Form";
 import MapModal from "./MapModal";
-import ImageGallery from "./ImageGallery";
+import ImageGallery from "./ImageGallery"; // Modular Gallery
 
 export default function ApartmentDetails() {
   const { id } = useParams();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [isMapOpen, setIsMapOpen] = useState(false);
 
-  // Try to get apartments from the cache
-  const apartments = queryClient.getQueryData(["apartments"]);
+  // Security & Admin check
+  const isAdmin = localStorage.getItem("admin") === "true";
 
-  // If not found in cache, refetch the apartments
-  const { data, isLoading, isError } = useQuery({
+  // Data Fetching with Cache Priority
+  const cachedData = queryClient.getQueryData(["apartments"]);
+  const {
+    data: fetchedData,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["apartments"],
     queryFn: fetchApartments,
-    enabled: !apartments, // only refetch if not in cache
+    enabled: !cachedData,
   });
 
-  // Use the cache if available, otherwise use the newly fetched data
-  const apartment =
-    apartments?.find((apt) => apt.id === Number(id)) ||
-    data?.find((apt) => apt.id === Number(id));
+  const apartments = cachedData || fetchedData || [];
+  const apartment = apartments.find((apt) => Number(apt.id) === Number(id));
+
+  // --- DATA CLEANING: The "Deep Parse" for Tags ---
+  const tags = (() => {
+    try {
+      let data = apartment?.tags;
+      // Keep parsing as long as it's a string (handles double-stringified data)
+      while (typeof data === "string") {
+        data = JSON.parse(data);
+      }
+      return Array.isArray(data) ? data : [];
+    } catch (e) {
+      console.error("Tag Parsing Error:", e);
+      return [];
+    }
+  })();
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-    });
+    window.scrollTo({ top: 0, left: 0 });
   }, []);
 
-  // Loading State
+  // --- ADMIN ACTIONS ---
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/apartments/${apartment.id}`,
+        {
+          method: "DELETE",
+        },
+      );
+      if (!response.ok) throw new Error();
+
+      queryClient.invalidateQueries(["apartments"]);
+      toast.success("Appartement supprimé avec succès 🗑️");
+      navigate("/appartements");
+    } catch (err) {
+      toast.error("Erreur lors de la suppression ❌");
+    }
+  };
+
+  const confirmDelete = () => {
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <p className="font-semibold text-slate-800">
+          Supprimer cet appartement ?
+        </p>
+        <div className="flex gap-2 justify-end">
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-3 py-1 bg-slate-100 rounded-md text-sm"
+          >
+            Annuler
+          </button>
+          <button
+            onClick={() => {
+              toast.dismiss(t.id);
+              handleDelete();
+            }}
+            className="px-3 py-1 bg-red-500 text-white rounded-md text-sm"
+          >
+            Confirmer
+          </button>
+        </div>
+      </div>
+    ));
+  };
+
+  // --- RENDER LOGIC ---
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50">
-        <div className="relative">
-          <div className="w-16 h-16 border-4 border-slate-200 border-t-primary rounded-full animate-spin"></div>
-        </div>
-        <p className="mt-4 text-slate-500 font-medium animate-pulse">
-          Chargement en cours...
+        <div className="w-12 h-12 border-4 border-slate-200 border-t-primary rounded-full animate-spin"></div>
+        <p className="mt-4 text-slate-500 font-medium">
+          Chargement de l'appartement...
         </p>
       </div>
     );
   }
 
-  // Error State
-  if (isError || !apartment) {
-    return <p>Error loading apartment details or apartment not found.</p>;
-  }
+  if (isError || !apartment)
+    return <div className="p-20 text-center">Appartement introuvable.</div>;
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
       <main className="max-w-7xl mx-auto px-6 pt-8">
-        {/* Back Link */}
-        <Link
-          to="/appartements"
-          className="inline-flex items-center gap-2 text-slate-600 hover:text-secondary transition font-medium group mb-4"
-        >
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition" />
-          Retour à la liste
-        </Link>
+        {/* Navigation Top Bar */}
+        <div className="flex justify-between items-center mb-6">
+          <Link
+            to="/appartements"
+            className="inline-flex items-center gap-2 text-slate-600 hover:text-secondary transition font-medium group"
+          >
+            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition" />{" "}
+            Retour à la recherche
+          </Link>
+
+          {isAdmin && (
+            <div className="flex gap-3">
+              <button
+                onClick={() =>
+                  navigate(`/modifier-appartement/${apartment.id}`)
+                }
+                className="flex items-center gap-2 bg-white border border-slate-200 hover:border-primary px-4 py-2 rounded-xl shadow-sm transition"
+              >
+                <Edit className="w-4 h-4" /> Modifier
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="flex items-center gap-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-4 py-2 rounded-xl shadow-sm transition"
+              >
+                <Trash2 className="w-4 h-4" /> Supprimer
+              </button>
+            </div>
+          )}
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           <div className="lg:col-span-2 space-y-8">
-            <div className="space-y-4">
-              <ImageGallery apartment={apartment} />
-            </div>
+            {/* Gallery Component */}
+            <ImageGallery apartment={apartment} />
 
-            {/* Apartment Details Section */}
             <div className="space-y-6">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
                 <div className="space-y-2">
-                  <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                    Disponible maintenant
-                  </span>
-                  <h1 className="text-4xl font-extrabold text-slate-900">
+                  <h1 className="text-4xl font-black text-slate-900 leading-tight">
                     {apartment.title}
                   </h1>
                   <button
@@ -100,14 +178,15 @@ export default function ApartmentDetails() {
                   </button>
                 </div>
                 <div className="text-4xl font-black">
-                  {apartment.price} ${" "}
-                  <span className="text-base text-slate-400 font-normal">
+                  {Math.floor(apartment.price)} $
+                  <span className="text-sm text-slate-400 font-normal uppercase tracking-widest">
+                    {" "}
                     / mois
                   </span>
                 </div>
               </div>
 
-              {/* Bedroom, Bathroom, and Size Info */}
+              {/* Specs Grid */}
               <div className="grid grid-cols-3 gap-4 py-6 border-y border-slate-200">
                 <div className="flex flex-col items-center text-slate-500 text-center gap-1">
                   <Bed className="w-6 h-6" />
@@ -127,25 +206,25 @@ export default function ApartmentDetails() {
                 </div>
               </div>
 
-              {/* Apartment Description */}
-              {apartment.description && (
-                <div className="space-y-4">
-                  <h2 className="text-2xl font-bold">À propos de ce logement</h2>
-                  <p className="text-slate-600 leading-relaxed text-lg">
-                    {apartment.description}
-                  </p>
-                </div>
-              )}
+              <div className="space-y-4">
+                <h2 className="text-2xl font-bold text-slate-800">
+                  Description
+                </h2>
+                <p className="text-slate-600 leading-relaxed text-lg whitespace-pre-line">
+                  {apartment.description}
+                </p>
+              </div>
 
-              {/* Tags */}
-              {apartment.tags.length > 0 && (
-                <ApartmentDetailsTags apartment={apartment} />
-              )}
+              {tags.length > 0 && <ApartmentDetailsTags tags={tags} />}
             </div>
           </div>
 
-          {/* Contact Form Section */}
-          <Form address={formatAddress(apartment, false)} />
+          {/* Contact Sticky Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-8">
+              <Form address={formatAddress(apartment, false)} />
+            </div>
+          </div>
         </div>
 
         <MapModal

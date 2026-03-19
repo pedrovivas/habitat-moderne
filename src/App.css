@@ -40,3 +40,105 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Container du formulaire */
+.apartment-form {
+  max-width: 800px;
+  margin: 2rem auto;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Titres et sections */
+.apartment-form h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b; /* gris foncé */
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Champs de formulaire */
+.apartment-form input,
+.apartment-form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 2px solid #e2e8f0; /* gris clair */
+  border-radius: 8px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.apartment-form input:focus,
+.apartment-form textarea:focus {
+  border-color: #3b82f6; /* bleu */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  outline: none;
+}
+
+/* Bouton */
+.apartment-form button {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.apartment-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+/* Zone d’images attractive */
+.image-dropzone {
+  border: 2px dashed #94a3b8;
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s, background-color 0.2s;
+}
+
+.image-dropzone:hover {
+  border-color: #3b82f6;
+  background-color: #f0f9ff;
+}
+
+/* Aperçu des images */
+.image-preview {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.image-preview img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.image-preview img:hover {
+  transform: scale(1.05);
+}
+
+/* Tags stylisés */
+.tag-badge {
+  display: inline-block;
+  background-color: #bfdbfe; /* bleu clair */
+  color: #1e40af; /* bleu foncé */
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  margin: 0.25rem 0.25rem 0 0;
+  font-size: 0.875rem;
+}

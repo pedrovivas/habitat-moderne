@@ -3,7 +3,6 @@ import { Link } from "react-router";
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      {/* Hero Section */}
       <section className="bg-slate-100 py-20 px-6">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
@@ -16,10 +15,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Text Content */}
           <div className="space-y-6 text-lg leading-relaxed text-slate-700">
             <p>
               Nous vous offrons des logements rénovés avec goût à des prix
@@ -27,14 +24,14 @@ export default function HomePage() {
             </p>
 
             <p>
-              Depuis les débuts de l'entreprise, nos bureaux sont situés au
-              3572, rue Wellington à Verdun.
+              Depuis le tout début de l'entreprise, nos bureaux sont situés au
+              3572, rue Wellington, à Verdun.
             </p>
 
             <p>
-              Notre structure à taille humaine mise sur l'expérience de notre
-              équipe administrative et d'entretien pour vous offrir un service
-              courtois et personnalisé.
+              Une structure à taille humaine privilégiant la stabilité et
+              l'expérience de notre personnel administratif et de notre équipe
+              d'entretien vous offrent un service courtois et personnalisé.
             </p>
 
             <p>
@@ -42,7 +39,6 @@ export default function HomePage() {
               appartements.
             </p>
 
-            {/* CTA */}
             <div>
               <Link
                 to="/appartements"
@@ -53,7 +49,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Image */}
           <div className="relative">
             <img
               src="/habitat-moderne-building.jpg"

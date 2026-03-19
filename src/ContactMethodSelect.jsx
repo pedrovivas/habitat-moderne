@@ -1,8 +1,4 @@
-import { useState } from "react";
-
-export default function ContactMethodSelect({ id, value, onChange }) {
-  const [touched, setTouched] = useState(false);
-
+export default function ContactMethodSelect({ id, value, onChange, touched, disabled }) {
   const isValid = value === "email" || value === "phone";
   const showError = touched && !isValid;
 
@@ -28,8 +24,7 @@ export default function ContactMethodSelect({ id, value, onChange }) {
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        onBlur={() => setTouched(true)}
-        required
+        disabled={disabled}
         className={`${baseClasses} ${stateClasses}`}
       >
         <option value="" disabled>Choisir une option</option>

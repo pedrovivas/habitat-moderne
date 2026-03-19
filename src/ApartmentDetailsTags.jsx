@@ -1,11 +1,11 @@
 import {CheckCircle2} from "lucide-react";
 
-export default function ApartmentDetailsTags({ apartment }) {
+export default function ApartmentDetailsTags({ tags }) {
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold">Inclusions et commodités</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {apartment.tags.map((item, idx) => (
+        {tags.map((item, idx) => (
           <div
             key={idx}
             className="flex items-center gap-3 bg-slate-100/50 p-4 rounded-xl border border-slate-100"
