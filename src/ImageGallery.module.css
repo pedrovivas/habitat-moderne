@@ -1,0 +1,32 @@
+/* ImageGallery.module.css */
+
+.galleryContainer {
+  position: relative;
+  width: 100%;
+}
+
+/* Hide Navigation Arrows on Mobile/Tablet */
+.galleryContainer :global(.swiper-button-next),
+.galleryContainer :global(.swiper-button-prev) {
+  display: none !important;
+}
+
+/* Hide Pagination Dots on Desktop */
+@media (min-width: 1024px) {
+  .galleryContainer :global(.swiper-pagination) {
+    display: none !important;
+  }
+  
+  /* Show Arrows on Desktop */
+  .galleryContainer :global(.swiper-button-next),
+  .galleryContainer :global(.swiper-button-prev) {
+    display: flex !important;
+  }
+}
+
+/* Ensure dots are visible on mobile */
+@media (max-width: 1023px) {
+  .galleryContainer :global(.swiper-pagination) {
+    display: block !important;
+  }
+}
