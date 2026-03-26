@@ -4,7 +4,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import fetchApartments from "../services/apartmentService";
 import toast from "react-hot-toast";
 
-
 export default function EditApartmentPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -104,17 +103,27 @@ export default function EditApartmentPage() {
   };
 
   const handleNewImages = (e) => {
-    setNewImages([...e.target.files]);
+    const files = Array.from(e.target.files);
+    setNewImages((prev) => [...prev, ...files]);
   };
 
   const handleRemoveExistingImage = (imgName) => {
     setExistingImages(existingImages.filter((img) => img !== imgName));
+  }; // Gérer le drop d'images
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files);
+    setNewImages((prev) => [...prev, ...files]);
+  };
+
+  // Autoriser le drag over
+  const handleDragOver = (e) => {
+    e.preventDefault();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      
       const payload = new FormData();
 
       for (const key in formData) {
@@ -251,7 +260,9 @@ export default function EditApartmentPage() {
         </div>
 
         <div>
-          <label className="block font-medium">Tags (séparés par une virgule)</label>
+          <label className="block font-medium">
+            Tags (séparés par une virgule)
+          </label>
           <input
             value={formData.tags.join(", ")}
             onChange={handleTagsChange}
@@ -260,61 +271,97 @@ export default function EditApartmentPage() {
         </div>
 
         <div>
-      <label className="block mb-1 font-semibold text-gray-700">
-        Disponibilité
-      </label>
+          <label className="block mb-1 font-semibold text-gray-700">
+            Disponibilité
+          </label>
 
-      <input
-        type="text"
-        name="availability"
-        placeholder="Ex: Disponible maintenant, 1 Juillet..."
-        value={formData.availability}
-        onChange={handleChange}
-        className="w-full p-3 border rounded-lg"
-      />
-    </div>
+          <input
+            type="text"
+            name="availability"
+            placeholder="Ex: Disponible maintenant, 1 Juillet..."
+            value={formData.availability}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-lg"
+          />
+        </div>
 
         <div className="flex items-center gap-3 mt-2">
-      <input
-        type="checkbox"
-        id="visible"
-        checked={formData.visible}
-        onChange={(e) =>
-          setFormData((prev) => ({ ...prev, visible: e.target.checked }))
-        }
-        className="w-5 h-5 accent-green-500"
-      />
+          <input
+            type="checkbox"
+            id="visible"
+            checked={formData.visible}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, visible: e.target.checked }))
+            }
+            className="w-5 h-5 accent-green-500"
+          />
 
-      <label htmlFor="visible" className="text-gray-700 font-medium">
-        Visible sur le site
-      </label>
-    </div>
+          <label htmlFor="visible" className="text-gray-700 font-medium">
+            Visible sur le site
+          </label>
+        </div>
 
         <div>
-          <label className="block font-medium">Images existantes</label>
-          <div className="flex gap-3 mt-2 flex-wrap">
+          <label className="block font-medium mb-1">Images existantes</label>
+
+          <div
+            className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition"
+            onClick={() => document.getElementById("imageInput").click()}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+          >
+            Cliquez ici ou glissez vos images
+          </div>
+
+          <input
+            type="file"
+            id="imageInput"
+            multiple
+            className="hidden"
+            onChange={handleNewImages}
+          />
+
+          <div className="flex flex-wrap gap-2 mt-4">
+            {/* Images existantes */}
             {existingImages.map((img, idx) => (
-              <div key={idx} className="relative">
+              <div key={`existing-${idx}`} className="relative">
                 <img
                   src={`http://localhost:5000/uploads/${img}`}
                   alt="existing"
-                  className="w-24 h-16 object-cover rounded"
+                  className="w-24 h-24 object-cover rounded shadow"
                 />
                 <button
                   type="button"
                   onClick={() => handleRemoveExistingImage(img)}
-                  className="absolute top-0 right-0 bg-red-500 text-white px-1 rounded"
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center"
                 >
-                  x
+                  ×
+                </button>
+              </div>
+            ))}
+
+            {/* Nouvelles images ajoutées */}
+            {newImages.map((file, i) => (
+              <div key={`new-${i}`} className="relative">
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt="preview"
+                  className="w-24 h-24 object-cover rounded shadow"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setNewImages((prev) =>
+                      prev.filter((_, index) => index !== i),
+                    )
+                  }
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center"
+                >
+                  ×
                 </button>
               </div>
             ))}
           </div>
-        </div>
-
-        <div>
-          <label className="block font-medium">Ajouter des nouvelles images</label>
-          <input type="file" multiple onChange={handleNewImages} />
         </div>
 
         <button

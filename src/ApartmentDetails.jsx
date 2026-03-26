@@ -130,7 +130,7 @@ export default function ApartmentDetails() {
         <div className="flex justify-between items-center mb-6">
           <Link
             to="/appartements"
-            className="inline-flex items-center gap-2 text-slate-600 hover:text-secondary transition font-medium group"
+            className="inline-flex items-center gap-2 text-slate-600 hover:opacity-80 transition font-medium group"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition" />{" "}
             Retour à la recherche
@@ -169,10 +169,10 @@ export default function ApartmentDetails() {
                   </h1>
                   <button
                     onClick={() => setIsMapOpen(true)}
-                    className="group text-slate-500 text-xl flex items-center gap-2 cursor-pointer transition"
+                    className="group text-slate-600 text-xl flex items-center gap-2 cursor-pointer hover:opacity-80 transition"
                   >
-                    <MapPin className="w-5 h-5 text-slate-600 group-hover:text-secondary transition" />
-                    <span className="group-hover:text-secondary transition">
+                    <MapPin className="w-5 h-5 text-[#EA4335] group-hover:scale-110 transition" />
+                    <span>
                       {formatAddress(apartment)}
                     </span>
                   </button>

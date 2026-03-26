@@ -10,6 +10,7 @@ import AddApartmentPage from "./AddApartmentPage";
 import LoginPage from "./LoginPage";
 import ProtectedRoute from "./ProtectedRoute";
 import EditApartmentPage from "./EditApartmentPage";
+import PrivacyPolicy from "./PrivacyPolicy";
 
 import { Toaster } from "react-hot-toast";
 
@@ -34,10 +35,16 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/appartements" element={<ListingsPage />} />
           <Route path="/appartement/:id" element={<ApartmentDetails />} />
-          <Route path="/modifier-appartement/:id" element={<EditApartmentPage />} />
+          <Route
+            path="/modifier-appartement/:id"
+            element={<EditApartmentPage />}
+          />
           <Route path="/nous-rejoindre" element={<ContactUs />} />
           <Route path="/admin/login" element={<LoginPage />} />
-
+          <Route
+            path="/politique-de-confidentialite"
+            element={<PrivacyPolicy />}
+          />
           <Route
             path="/ajouter-appartement"
             element={

@@ -7,8 +7,8 @@ export default function Apartment({ apartment }) {
   const images = Array.isArray(apartment.images)
     ? apartment.images
     : apartment.images
-    ? JSON.parse(apartment.images)
-    : [];
+      ? JSON.parse(apartment.images)
+      : [];
 
   return (
     <div className="group bg-white rounded-[2rem] overflow-hidden border border-slate-200 hover:border-primary hover:shadow-2xl hover:shadow-slate-500/50 transition-all duration-500 cursor-pointer flex flex-col">
@@ -23,9 +23,11 @@ export default function Apartment({ apartment }) {
           alt={apartment.title}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-        <div className="absolute top-4 left-4 bg-primary px-3 py-1 rounded-full text-[10px] font-black uppercase text-slate-900 shadow-sm">
-          {apartment.neighborhood}
-        </div>
+        {apartment.neighborhood && (
+          <div className="absolute top-4 left-4 bg-primary px-3 py-1 rounded-full text-[10px] font-black uppercase text-slate-900 shadow-sm">
+            {apartment.neighborhood}
+          </div>
+        )}
       </div>
 
       <div className="p-6 flex-grow flex flex-col">
@@ -37,7 +39,7 @@ export default function Apartment({ apartment }) {
           </span>
           <div className="mb-2">
             <span className="text-2xl font-black text-slate-800">
-              {Math.floor(apartment.price)}{" "}$
+              {Math.floor(apartment.price)} $
             </span>
             <span className="text-xs text-slate-400 font-medium"> / mois</span>
           </div>

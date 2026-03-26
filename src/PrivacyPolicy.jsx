@@ -1,4 +1,10 @@
+import { useEffect } from "react";
+
 export default function PrivacyPolicy() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 });
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
       <main className="max-w-7xl mx-auto px-6 pt-8">
