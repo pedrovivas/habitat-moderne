@@ -39,7 +39,7 @@ export default function App() {
             path="/modifier-appartement/:id"
             element={<EditApartmentPage />}
           />
-          <Route path="/nous-rejoindre" element={<ContactUs />} />
+          <Route path="/nous-joindre" element={<ContactUs />} />
           <Route path="/admin/login" element={<LoginPage />} />
           <Route
             path="/politique-de-confidentialite"

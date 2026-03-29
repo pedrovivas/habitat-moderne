@@ -25,7 +25,7 @@ export default function Navbar() {
     if (selectedLang !== "fr") {
       toast(
         "Votre navigateur peut traduire automatiquement cette page dans la langue choisie.",
-        { icon: "🌐", duration: 4000 }
+        { icon: "🌐", duration: 4000 },
       );
     }
   };
@@ -43,23 +43,44 @@ export default function Navbar() {
               Habitat Moderne inc.
             </span>
             <br />
-            <span className="text-lg md:text-2xl">
-              Gestion immobilière
-            </span>
+            <span className="text-lg md:text-2xl">Gestion immobilière</span>
           </span>
         </Link>
 
+        {/* Desktop Menu */}
         <ul className="hidden md:flex gap-6 items-center">
-          <li className="font-medium hover:opacity-75 text-lg">
-            <Link to="/">Accueil</Link>
+          <li className="font-medium text-lg">
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) =>
+                `${isActive ? "opacity-80" : "hover:opacity-80"}`
+              }
+            >
+              Accueil
+            </NavLink>
           </li>
 
-          <li className="font-medium hover:opacity-75 text-lg">
-            <Link to="/appartements">Nos appartements</Link>
+          <li className="font-medium text-lg">
+            <NavLink
+              to="/appartements"
+              className={({ isActive }) =>
+                `${isActive ? "opacity-80" : "hover:opacity-80"}`
+              }
+            >
+              Nos appartements
+            </NavLink>
           </li>
 
-          <li className="font-medium hover:opacity-75 text-lg">
-            <Link to="/nous-rejoindre">Nous joindre</Link>
+          <li className="font-medium text-lg">
+            <NavLink
+              to="/nous-joindre"
+              className={({ isActive }) =>
+                `${isActive ? "opacity-80" : "hover:opacity-80"}`
+              }
+            >
+              Nous joindre
+            </NavLink>
           </li>
 
           {/* <li>
@@ -72,8 +93,21 @@ export default function Navbar() {
               <option value="en">English</option>
             </select>
           </li> */}
+
+          {/* <li className="block text-lg font-medium">
+            {!isAuthenticated ? (
+              <Link to="/admin/login" onClick={closeMenu}>
+                Se connecter
+              </Link>
+            ) : (
+              <Link to="/admin/dashboard" onClick={closeMenu}>
+                Tableau de bord
+              </Link>
+            )}
+          </li> */}
         </ul>
 
+        {/* Mobile Burger Button */}
         <button
           onClick={toggleMenu}
           className="md:hidden p-2 rounded-lg transition"
@@ -82,28 +116,39 @@ export default function Navbar() {
         </button>
       </div>
 
+      {/* Mobile Menu */}
       <div
         className={`md:hidden absolute top-full left-0 w-full bg-primary transition-all duration-300 overflow-hidden ${
           isOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <ul className="flex flex-col px-6 py-4 gap-4">
-          <li>
-            <Link to="/" onClick={closeMenu}>
+          <li className="block text-lg font-medium">
+            <NavLink
+              to="/"
+              onClick={closeMenu}
+              className={({ isActive }) => `${isActive && "opacity-80"}`}
+            >
               Accueil
-            </Link>
+            </NavLink>
           </li>
-
-          <li>
-            <Link to="/appartements" onClick={closeMenu}>
+          <li className="block text-lg font-medium">
+            <NavLink
+              to="/appartements"
+              onClick={closeMenu}
+              className={({ isActive }) => `${isActive && "opacity-80"}`}
+            >
               Nos appartements
-            </Link>
+            </NavLink>
           </li>
-
-          <li>
-            <Link to="/nous-rejoindre" onClick={closeMenu}>
-              Nous rejoindre
-            </Link>
+          <li className="block text-lg font-medium">
+            <NavLink
+              to="/nous-joindre"
+              onClick={closeMenu}
+              className={({ isActive }) => `${isActive && "opacity-80"}`}
+            >
+              Nous joindre
+            </NavLink>
           </li>
 
           {/* <li>
@@ -117,7 +162,7 @@ export default function Navbar() {
             </select>
           </li> */}
 
-          <li>
+          {/* <li className="block text-lg font-medium">
             {!isAuthenticated ? (
               <Link to="/admin/login" onClick={closeMenu}>
                 Se connecter
@@ -127,7 +172,7 @@ export default function Navbar() {
                 Tableau de bord
               </Link>
             )}
-          </li>
+          </li> */}
         </ul>
       </div>
     </nav>
