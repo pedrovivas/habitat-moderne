@@ -1,12 +1,13 @@
 import { Link, NavLink } from "react-router";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [lang, setLang] = useState("fr");
-  const isAuthenticated = localStorage.getItem("admin");
+
+  // ✅ Vérifie si admin est connecté
+  const isAuthenticated = !!localStorage.getItem("admin");
 
   function toggleMenu() {
     setIsOpen((prev) => !prev);
@@ -16,23 +17,16 @@ export default function Navbar() {
     setIsOpen(false);
   }
 
-  const handleChangeLang = (e) => {
-    const selectedLang = e.target.value;
-    setLang(selectedLang);
-
-    document.documentElement.lang = selectedLang;
-
-    if (selectedLang !== "fr") {
-      toast(
-        "Votre navigateur peut traduire automatiquement cette page dans la langue choisie.",
-        { icon: "🌐", duration: 4000 },
-      );
-    }
-  };
+  function handleLogout() {
+    localStorage.removeItem("admin");
+    toast.success("Déconnecté avec succès");
+    window.location.href = "/admin/login";
+  }
 
   return (
     <nav className="bg-primary border-b top-0 z-40 relative">
       <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+        {/* LOGO */}
         <Link
           to="/"
           onClick={closeMenu}
@@ -47,134 +41,80 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Menu */}
+        {/* MENU DESKTOP */}
         <ul className="hidden md:flex gap-6 items-center">
           <li className="font-medium text-lg">
-            <NavLink
-              to="/"
-              end
-              className={({ isActive }) =>
-                `${isActive ? "opacity-80" : "hover:opacity-80"}`
-              }
-            >
-              Accueil
-            </NavLink>
+            <NavLink to="/">Accueil</NavLink>
           </li>
 
           <li className="font-medium text-lg">
-            <NavLink
-              to="/appartements"
-              className={({ isActive }) =>
-                `${isActive ? "opacity-80" : "hover:opacity-80"}`
-              }
-            >
-              Nos appartements
-            </NavLink>
+            <NavLink to="/appartements">Nos appartements</NavLink>
           </li>
 
           <li className="font-medium text-lg">
-            <NavLink
-              to="/nous-joindre"
-              className={({ isActive }) =>
-                `${isActive ? "opacity-80" : "hover:opacity-80"}`
-              }
-            >
-              Nous joindre
-            </NavLink>
+            <NavLink to="/nous-joindre">Nous joindre</NavLink>
           </li>
 
-          {/* <li>
-            <select
-              value={lang}
-              onChange={handleChangeLang}
-              className="border rounded px-2 py-1 text-sm"
-            >
-              <option value="fr">Français</option>
-              <option value="en">English</option>
-            </select>
-          </li> */}
-
-          {/* <li className="block text-lg font-medium">
-            {!isAuthenticated ? (
-              <Link to="/admin/login" onClick={closeMenu}>
-                Se connecter
-              </Link>
-            ) : (
-              <Link to="/admin/dashboard" onClick={closeMenu}>
-                Tableau de bord
-              </Link>
-            )}
-          </li> */}
+          {/* ✅ ADMIN */}
+          {isAuthenticated && (
+            <li>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-400 text-white px-4 py-1.5 rounded-lg hover:scale-105 transition duration-200 shadow-md"
+              >
+                <LogOut size={16} />
+                Déconnexion
+              </button>
+            </li>
+          )}
         </ul>
 
-        {/* Mobile Burger Button */}
-        <button
-          onClick={toggleMenu}
-          className="md:hidden p-2 rounded-lg transition"
-        >
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        {/* BOUTON MOBILE */}
+        <button onClick={toggleMenu} className="md:hidden p-2 rounded-lg">
+          {isOpen ? <X /> : <Menu />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      <div
-        className={`md:hidden absolute top-full left-0 w-full bg-primary transition-all duration-300 overflow-hidden ${
-          isOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <ul className="flex flex-col px-6 py-4 gap-4">
-          <li className="block text-lg font-medium">
-            <NavLink
-              to="/"
-              onClick={closeMenu}
-              className={({ isActive }) => `${isActive && "opacity-80"}`}
-            >
-              Accueil
-            </NavLink>
-          </li>
-          <li className="block text-lg font-medium">
-            <NavLink
-              to="/appartements"
-              onClick={closeMenu}
-              className={({ isActive }) => `${isActive && "opacity-80"}`}
-            >
-              Nos appartements
-            </NavLink>
-          </li>
-          <li className="block text-lg font-medium">
-            <NavLink
-              to="/nous-joindre"
-              onClick={closeMenu}
-              className={({ isActive }) => `${isActive && "opacity-80"}`}
-            >
-              Nous joindre
-            </NavLink>
-          </li>
+      {/* MENU MOBILE */}
+      {isOpen && (
+        <div className="md:hidden bg-primary px-6 py-4">
+          <ul className="flex flex-col gap-4">
+            <li className="text-lg">
+              <NavLink to="/" onClick={closeMenu}>
+                Accueil
+              </NavLink>
+            </li>
 
-          {/* <li>
-            <select
-              value={lang}
-              onChange={handleChangeLang}
-              className="border rounded px-2 py-1 text-sm w-full"
-            >
-              <option value="fr">Français</option>
-              <option value="en">English</option>
-            </select>
-          </li> */}
+            <li className="text-lg">
+              <NavLink to="/appartements" onClick={closeMenu}>
+                Nos appartements
+              </NavLink>
+            </li>
 
-          {/* <li className="block text-lg font-medium">
-            {!isAuthenticated ? (
-              <Link to="/admin/login" onClick={closeMenu}>
-                Se connecter
-              </Link>
-            ) : (
-              <Link to="/admin/dashboard" onClick={closeMenu}>
-                Tableau de bord
-              </Link>
+            <li className="text-lg">
+              <NavLink to="/nous-joindre" onClick={closeMenu}>
+                Nous joindre
+              </NavLink>
+            </li>
+
+            {/* ✅ ADMIN MOBILE */}
+            {isAuthenticated && (
+              <li>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    closeMenu();
+                  }}
+                  className="flex items-center gap-2 bg-gradient-to-r from-blue-700 via-blue-500 to-blue-300 text-white px-4 py-1.5 rounded-lg hover:from-blue-800 hover:via-blue-600 hover:to-blue-400 transition duration-300 shadow-md"
+                >
+                  <LogOut size={16} />
+                  Déconnexion
+                </button>
+              </li>
             )}
-          </li> */}
-        </ul>
-      </div>
+          </ul>
+        </div>
+      )}
     </nav>
   );
 }

@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { HashRouter, Routes, Route } from "react-router";
 import HomePage from "./HomePage";
 import ListingsPage from "./ListingPage";
 import ApartmentDetails from "./ApartmentDetails";
@@ -26,7 +26,7 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <HashRouter>
         <Navbar />
 
         <Toaster position="top-right" reverseOrder={false} />
@@ -55,7 +55,7 @@ export default function App() {
           />
         </Routes>
         <Footer />
-      </BrowserRouter>
+      </HashRouter>
     </QueryClientProvider>
   );
 }
