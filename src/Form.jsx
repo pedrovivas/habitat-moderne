@@ -3,6 +3,7 @@ import PhoneInput from "./PhoneInput";
 import EmailInput from "./EmailInput";
 import FullNameInput from "./FullNameInput";
 import ContactMethodSelect from "./ContactMethodSelect";
+import MessageInput from "./MessageInput";
 
 export default function Form({
   address,
@@ -23,6 +24,7 @@ export default function Form({
   const emailId = useId();
   const phoneId = useId();
   const contactMethodId = useId();
+  const messageId = useId();
 
   const isButtonDisabled = status === "sending";
 
@@ -110,9 +112,13 @@ export default function Form({
             value={formData.contactMethod}
             onChange={(val) => handleChange("contactMethod", val)}
           />
-          {error && (
-            <p className="text-red-500 text-xs ml-1 mt-1">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-xs ml-1 mt-1">{error}</p>}
+
+          <MessageInput
+            id={messageId}
+            value={formData.message}
+            onChange={(val) => handleChange("message", val)}
+          />
 
           <button
             type="submit"
