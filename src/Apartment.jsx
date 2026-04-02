@@ -11,8 +11,8 @@ export default function Apartment({ apartment }) {
       : [];
 
   return (
-    <div className="group bg-white rounded-[2rem] overflow-hidden border border-slate-200 hover:border-primary hover:shadow-2xl hover:shadow-slate-500/50 transition-all duration-500 cursor-pointer flex flex-col">
-      <div className="relative h-64 overflow-hidden">
+    <div className="group bg-white rounded-[2rem] overflow-hidden border border-slate-200 hover:border-primary hover:shadow-2xl hover:shadow-slate-500/50 transition-all duration-500 cursor-pointer flex flex-col h-full">
+      <div className="relative h-64 overflow-hidden shrink-0">
         <img
           src={
             images[0]
@@ -43,12 +43,12 @@ export default function Apartment({ apartment }) {
             </span>
             <span className="text-xs text-slate-400 font-medium"> / mois</span>
           </div>
-          <h3 className="text-xl font-bold text-slate-800 leading-tight group-hover:opacity-75 transition-colors">
+          <h3 className="text-xl font-bold text-slate-800 leading-tight group-hover:opacity-75 transition-colors line-clamp-2 min-h-[3.5rem]">
             {apartment.title}
           </h3>
         </div>
 
-        <p className="text-slate-500 line-clamp-2 min-h-[3rem]">
+        <p className="text-slate-500 line-clamp-2 min-h-[3rem] mb-4">
           {formatAddress(apartment, false)}
         </p>
 
@@ -59,10 +59,12 @@ export default function Apartment({ apartment }) {
           <span className="flex items-center font-medium">
             <Bath size={16} className="mr-1.5" /> {apartment.bathrooms}
           </span>
-          <span className="flex items-center font-medium">
-            <Maximize size={16} className="mr-1.5" /> {apartment.sqft} pi
-            <sup>2</sup>
-          </span>
+          {apartment.sqft > 0 && (
+            <span className="flex items-center font-medium">
+              <Maximize size={16} className="mr-1.5" /> {apartment.sqft} pi
+              <sup>2</sup>
+            </span>
+          )}
           {isAdmin && (
             <span
               title={apartment.visible ? "Visible sur le site" : "Non visible"}

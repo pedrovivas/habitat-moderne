@@ -7,7 +7,7 @@ import {
   MapPin,
   Bed,
   Bath,
-  Square,
+  Maximize,
   Edit,
   Trash2,
 } from "lucide-react";
@@ -169,9 +169,9 @@ export default function ApartmentDetails() {
                   </h1>
                   <button
                     onClick={() => setIsMapOpen(true)}
-                    className="group text-slate-600 text-xl flex items-center gap-2 cursor-pointer hover:opacity-80 transition"
+                    className="group text-left text-slate-600 text-xl cursor-pointer hover:opacity-80 transition"
                   >
-                    <MapPin className="w-5 h-5 text-[#EA4335] group-hover:scale-110 transition" />
+                    <MapPin className="w-5 h-5 text-[#EA4335] inline mr-2 mb-1 group-hover:scale-110 transition" />
                     <span>
                       {formatAddress(apartment)}
                     </span>
@@ -186,8 +186,8 @@ export default function ApartmentDetails() {
                 </div>
               </div>
 
-              {/* Specs Grid */}
-              <div className="grid grid-cols-3 gap-4 py-6 border-y border-slate-200">
+              {/* Specs */}
+              <div className="flex justify-around py-6 border-y border-slate-200">
                 <div className="flex flex-col items-center text-slate-500 text-center gap-1">
                   <Bed className="w-6 h-6" />
                   <p className="font-bold text-lg">
@@ -200,10 +200,12 @@ export default function ApartmentDetails() {
                     {apartment.bathrooms} Bains
                   </p>
                 </div>
-                <div className="flex flex-col items-center text-slate-500 text-center gap-1">
-                  <Square className="w-6 h-6" />
-                  <p className="font-bold text-lg">{apartment.sqft} pi²</p>
-                </div>
+                {apartment.sqft > 0 && (
+                  <div className="flex flex-col items-center text-slate-500 text-center gap-1">
+                    <Maximize className="w-6 h-6" />
+                    <p className="font-bold text-lg">{apartment.sqft} pi²</p>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-4">
