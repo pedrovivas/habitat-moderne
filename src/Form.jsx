@@ -47,11 +47,17 @@ export default function Form({
 
     setStatus("sending");
 
+    const dataToSend = {
+    ...formData,
+    apartmentId: address,
+    message: formData.message.trim(),
+    };
+
     try {
       const res = await fetch("http://localhost:5000/api/email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSend),
       });
 
       if (!res.ok) throw new Error("Erreur lors de l'envoi de l'email");

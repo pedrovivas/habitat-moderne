@@ -20,7 +20,7 @@ export default function Navbar() {
   function handleLogout() {
     localStorage.removeItem("admin");
     toast.success("Déconnecté avec succès");
-    window.location.href = "/admin/login";
+    window.location.href = "#/admin/login";
   }
 
   return (

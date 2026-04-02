@@ -5,10 +5,11 @@ dotenv.config();
 
 export const sendEmailToOwner = async ({ fullName, email, phone, contactMethod, message, apartmentId }) => {
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: process.env.HOST,
+    port: process.env.PORT,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     },
   });
 
@@ -34,6 +35,9 @@ export const sendEmailToOwner = async ({ fullName, email, phone, contactMethod, 
         <p style="color: #475569; font-size: 16px; margin-bottom: 10px;">
           <strong>Téléphone :</strong> ${phone || "N/A"}
         </p>
+        <p style="color: #475569; font-size: 16px; margin-bottom: 10px;">
+          <strong>Message :</strong> ${message || "N/A"}
+        </p>
         <p style="color: #64748b; font-size: 14px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
           Vous recevez ce message depuis votre application Habitat Moderne.
         </p>
@@ -47,10 +51,11 @@ export const sendEmailToOwner = async ({ fullName, email, phone, contactMethod, 
 
 export const sendLoginCode = async ({ email, code }) => {
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: process.env.HOST,
+    port: process.env.PORT,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     },
   });
 
