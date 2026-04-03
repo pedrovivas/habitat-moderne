@@ -11,7 +11,7 @@ import LoginPage from "./LoginPage";
 import ProtectedRoute from "./ProtectedRoute";
 import EditApartmentPage from "./EditApartmentPage";
 import PrivacyPolicy from "./PrivacyPolicy";
-
+import NotFound from "./NotFound";
 import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient({
@@ -53,6 +53,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </HashRouter>

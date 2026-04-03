@@ -44,15 +44,37 @@ export default function Navbar() {
         {/* MENU DESKTOP */}
         <ul className="hidden md:flex gap-6 items-center">
           <li className="font-medium text-lg">
-            <NavLink to="/">Accueil</NavLink>
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) =>
+                `${isActive ? "opacity-80" : "hover:opacity-80"}`
+              }
+            >
+              Accueil
+            </NavLink>
           </li>
 
           <li className="font-medium text-lg">
-            <NavLink to="/appartements">Nos appartements</NavLink>
+            <NavLink
+              to="/appartements"
+              className={({ isActive }) =>
+                `${isActive ? "opacity-80" : "hover:opacity-80"}`
+              }
+            >
+              Nos appartements
+            </NavLink>
           </li>
 
           <li className="font-medium text-lg">
-            <NavLink to="/nous-joindre">Nous joindre</NavLink>
+            <NavLink
+              to="/nous-joindre"
+              className={({ isActive }) =>
+                `${isActive ? "opacity-80" : "hover:opacity-80"}`
+              }
+            >
+              Nous joindre
+            </NavLink>
           </li>
 
           {/* ✅ ADMIN */}
@@ -80,19 +102,32 @@ export default function Navbar() {
         <div className="md:hidden bg-primary px-6 py-4">
           <ul className="flex flex-col gap-4">
             <li className="text-lg">
-              <NavLink to="/" onClick={closeMenu}>
+              <NavLink
+                to="/"
+                end
+                onClick={closeMenu}
+                className={({ isActive }) => `${isActive && "opacity-80"}`}
+              >
                 Accueil
               </NavLink>
             </li>
 
             <li className="text-lg">
-              <NavLink to="/appartements" onClick={closeMenu}>
+              <NavLink
+                to="/appartements"
+                onClick={closeMenu}
+                className={({ isActive }) => `${isActive && "opacity-80"}`}
+              >
                 Nos appartements
               </NavLink>
             </li>
 
             <li className="text-lg">
-              <NavLink to="/nous-joindre" onClick={closeMenu}>
+              <NavLink
+                to="/nous-joindre"
+                onClick={closeMenu}
+                className={({ isActive }) => `${isActive && "opacity-80"}`}
+              >
                 Nous joindre
               </NavLink>
             </li>
