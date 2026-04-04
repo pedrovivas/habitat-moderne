@@ -3,6 +3,11 @@ import { Link } from "react-router";
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
+      <title>Habitat Moderne inc. | Accueil</title>
+      <meta
+        name="description"
+        content="Entreprise familiale de gestion immobilière solidement établie à Montréal depuis 1965."
+      />
       <section className="bg-slate-100 py-20 px-6">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">

@@ -5,6 +5,13 @@ export default function ContactUs() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
+      <title>
+        Nous joindre | Habitat Moderne inc. - Gestion immobilière à Montréal
+      </title>
+      <meta
+        name="description"
+        content="Besoin d'un logement ? Pour nous joindre ou visiter un appartement, contactez l'équipe d'Habitat Moderne à Montréal. Un service humain et personnalisé depuis 1965."
+      />
       <main className="max-w-4xl mx-auto px-6 pt-12">
         <h1 className="text-3xl font-bold mb-8 text-slate-800">
           Contactez-nous

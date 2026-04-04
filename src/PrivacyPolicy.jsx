@@ -7,6 +7,11 @@ export default function PrivacyPolicy() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
+      <title>Politique de Confidentialité | Habitat Moderne inc.</title>
+      <meta
+        name="description"
+        content="Consultez la politique de confidentialité d'Habitat Moderne inc. Découvrez comment nous protégeons vos renseignements personnels conformément aux lois en vigueur."
+      />
       <main className="max-w-7xl mx-auto px-6 pt-8">
         <h1 className="text-3xl font-bold mb-6">
           Politique de Confidentialité

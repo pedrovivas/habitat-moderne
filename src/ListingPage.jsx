@@ -22,6 +22,7 @@ export default function ListingsPage() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50">
+        <title>Chargement... | Habitat Moderne inc.</title>
         <div className="relative">
           <div className="w-16 h-16 border-4 border-slate-200 border-t-primary rounded-full animate-spin"></div>
         </div>
@@ -35,6 +36,8 @@ export default function ListingsPage() {
   if (isError) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-50 px-4">
+        <title>Erreur de chargement | Habitat Moderne inc.</title>
+        <meta name="robots" content="noindex" />
         <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md text-center border border-red-100">
           <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertCircle size={32} />
@@ -60,6 +63,11 @@ export default function ListingsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
+      <title>Habitat Moderne inc. | Appartements à louer à Montréal</title>
+      <meta
+        name="description"
+        content="Découvrez nos appartements rénovés avec goût à Montréal. Une entreprise familiale établie depuis 1965."
+      />
       <main className="max-w-7xl mx-auto px-6 pt-8">
         <div className="mb-10 space-y-4">
           <h2 className="text-3xl font-bold text-slate-800 tracking-tight">

@@ -112,6 +112,7 @@ export default function ApartmentDetails() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50">
+        <title>Chargement l'appartement... | Habitat Moderne inc.</title>
         <div className="w-12 h-12 border-4 border-slate-200 border-t-primary rounded-full animate-spin"></div>
         <p className="mt-4 text-slate-500 font-medium">
           Chargement de l'appartement...
@@ -120,11 +121,23 @@ export default function ApartmentDetails() {
     );
   }
 
-  if (isError || !apartment)
-    return <div className="p-20 text-center">Appartement introuvable.</div>;
+  if (isError || !apartment) {
+    return (
+      <>
+        <title>Appartement introuvable | Habitat Moderne inc.</title>
+        <div className="p-20 text-center">Appartement introuvable.</div>
+      </>
+    );
+  }
+    
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
+      <title>{`${apartment.title} | Habitat Moderne Inc.`}</title>
+      <meta
+        name="description"
+        content={`Consultez les détails de ce logement : ${apartment.title} à ${apartment.city || "Montréal"}. ${apartment.bedrooms} chambres. Géré par Habitat Moderne inc.`}
+      />
       <main className="max-w-7xl mx-auto px-6 pt-8">
         {/* Navigation Top Bar */}
         <div className="flex justify-between items-center mb-6">
@@ -172,9 +185,7 @@ export default function ApartmentDetails() {
                     className="group text-left text-slate-600 text-xl cursor-pointer hover:opacity-80 transition"
                   >
                     <MapPin className="w-5 h-5 text-[#EA4335] inline mr-2 mb-1 group-hover:scale-110 transition" />
-                    <span>
-                      {formatAddress(apartment)}
-                    </span>
+                    <span>{formatAddress(apartment)}</span>
                   </button>
                 </div>
                 <div className="text-4xl font-black">
