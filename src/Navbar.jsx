@@ -1,13 +1,17 @@
-import { Link, NavLink } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
-import { Menu, X, LogOut } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import toast from "react-hot-toast";
+import NavbarDesktop from "./NavbarDesktop";
+import NavbarMobile from "./NavbarMobile";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   // ✅ Vérifie si admin est connecté
   const isAuthenticated = !!localStorage.getItem("admin");
+
+  const navigate = useNavigate();
 
   function toggleMenu() {
     setIsOpen((prev) => !prev);
@@ -20,7 +24,7 @@ export default function Navbar() {
   function handleLogout() {
     localStorage.removeItem("admin");
     toast.success("Déconnecté avec succès");
-    window.location.href = "#/admin/login";
+    navigate("/admin/login");
   }
 
   return (
@@ -41,55 +45,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* MENU DESKTOP */}
-        <ul className="hidden md:flex gap-6 items-center">
-          <li className="font-medium text-lg">
-            <NavLink
-              to="/"
-              end
-              className={({ isActive }) =>
-                `${isActive ? "opacity-80" : "hover:opacity-80"}`
-              }
-            >
-              Accueil
-            </NavLink>
-          </li>
-
-          <li className="font-medium text-lg">
-            <NavLink
-              to="/appartements"
-              className={({ isActive }) =>
-                `${isActive ? "opacity-80" : "hover:opacity-80"}`
-              }
-            >
-              Nos appartements
-            </NavLink>
-          </li>
-
-          <li className="font-medium text-lg">
-            <NavLink
-              to="/nous-joindre"
-              className={({ isActive }) =>
-                `${isActive ? "opacity-80" : "hover:opacity-80"}`
-              }
-            >
-              Nous joindre
-            </NavLink>
-          </li>
-
-          {/* ✅ ADMIN */}
-          {isAuthenticated && (
-            <li>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-400 text-white px-4 py-1.5 rounded-lg hover:scale-105 transition duration-200 shadow-md"
-              >
-                <LogOut size={16} />
-                Déconnexion
-              </button>
-            </li>
-          )}
-        </ul>
+        <NavbarDesktop isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
 
         {/* BOUTON MOBILE */}
         <button onClick={toggleMenu} className="md:hidden p-2 rounded-lg">
@@ -97,59 +53,7 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* MENU MOBILE */}
-      {isOpen && (
-        <div className="md:hidden bg-primary px-6 py-4">
-          <ul className="flex flex-col gap-4">
-            <li className="text-lg">
-              <NavLink
-                to="/"
-                end
-                onClick={closeMenu}
-                className={({ isActive }) => `${isActive && "opacity-80"}`}
-              >
-                Accueil
-              </NavLink>
-            </li>
-
-            <li className="text-lg">
-              <NavLink
-                to="/appartements"
-                onClick={closeMenu}
-                className={({ isActive }) => `${isActive && "opacity-80"}`}
-              >
-                Nos appartements
-              </NavLink>
-            </li>
-
-            <li className="text-lg">
-              <NavLink
-                to="/nous-joindre"
-                onClick={closeMenu}
-                className={({ isActive }) => `${isActive && "opacity-80"}`}
-              >
-                Nous joindre
-              </NavLink>
-            </li>
-
-            {/* ✅ ADMIN MOBILE */}
-            {isAuthenticated && (
-              <li>
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    closeMenu();
-                  }}
-                  className="flex items-center gap-2 bg-gradient-to-r from-blue-700 via-blue-500 to-blue-300 text-white px-4 py-1.5 rounded-lg hover:from-blue-800 hover:via-blue-600 hover:to-blue-400 transition duration-300 shadow-md"
-                >
-                  <LogOut size={16} />
-                  Déconnexion
-                </button>
-              </li>
-            )}
-          </ul>
-        </div>
-      )}
+      <NavbarMobile isOpen={isOpen} closeMenu={closeMenu} handleLogout={handleLogout} isAuthenticated={isAuthenticated} />
     </nav>
   );
 }
