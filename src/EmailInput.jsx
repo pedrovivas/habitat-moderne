@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function EmailInput({ id, value, onChange, required }) {
   const [touched, setTouched] = useState(false);
+  const { t } = useTranslation();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -24,7 +26,7 @@ export default function EmailInput({ id, value, onChange, required }) {
         htmlFor={id}
         className="text-xs font-bold text-slate-400 uppercase ml-1"
       >
-        Courriel
+        {t("form.email.label")}
       </label>
 
       <input
@@ -34,13 +36,13 @@ export default function EmailInput({ id, value, onChange, required }) {
         onChange={(e) => onChange(e.target.value)}
         onBlur={() => setTouched(true)}
         required={required}
-        placeholder="Votre adresse courriel"
+        placeholder={t("form.email.placeholder")}
         className={`${baseClasses} ${stateClasses}`}
       />
 
       {showError && (
         <p className="text-xs text-red-500 ml-1">
-          Veuillez entrer une adresse courriel valide.
+          {t("form.email.error")}
         </p>
       )}
     </div>

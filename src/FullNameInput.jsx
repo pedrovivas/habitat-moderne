@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function FullNameInput({ id, value, onChange }) {
   const [touched, setTouched] = useState(false);
+  const { t } = useTranslation();
 
   const trimmedName = value.trim();
   const isValid = trimmedName.length >= 2;
@@ -24,7 +26,7 @@ export default function FullNameInput({ id, value, onChange }) {
         htmlFor={id}
         className="text-xs font-bold text-slate-400 uppercase ml-1"
       >
-        Nom complet
+        {t("form.fullName.label")}
       </label>
 
       <input
@@ -34,13 +36,13 @@ export default function FullNameInput({ id, value, onChange }) {
         onChange={(e) => onChange(e.target.value)}
         onBlur={() => setTouched(true)}
         required
-        placeholder="Votre nom complet"
+        placeholder={t("form.fullName.placeholder")}
         className={`${baseClasses} ${stateClasses}`}
       />
 
       {showError && (
         <p className="text-xs text-red-500 ml-1">
-          Veuillez entrer votre nom complet.
+          {t("form.fullName.error")}
         </p>
       )}
     </div>

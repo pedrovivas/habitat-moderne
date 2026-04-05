@@ -1,12 +1,15 @@
+import { useTranslation } from "react-i18next";
+
 export default function PhoneInput({
   id,
   value = "",
   onChange,
-  placeholder = "Votre numéro de téléphone",
   required,
   className = "",
   ...props
 }) {
+  const { t } = useTranslation();
+
   function format(digits) {
     if (digits.length > 6)
       return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
@@ -29,7 +32,7 @@ export default function PhoneInput({
         htmlFor={id}
         className="text-xs font-bold text-slate-400 uppercase ml-1"
       >
-        Téléphone
+        {t("form.phone.label")}
       </label>
 
       <input
@@ -39,7 +42,7 @@ export default function PhoneInput({
         value={formattedValue}
         onChange={handleChangeInput}
         required={required}
-        placeholder={placeholder}
+        placeholder={t("form.phone.placeholder")}
         className={`w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none transition ${className}`}
         {...props}
       />

@@ -1,17 +1,14 @@
+import { useTranslation } from "react-i18next";
 import { Phone, Mail, Printer } from "lucide-react";
 
 export default function ContactUs() {
+  const { t } = useTranslation();
   const numberStyle = "text-lg font-bold tracking-tight";
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
-      <title>
-        Nous joindre | Habitat Moderne inc. - Gestion immobilière à Montréal
-      </title>
-      <meta
-        name="description"
-        content="Besoin d'un logement ? Pour nous joindre ou visiter un appartement, contactez l'équipe d'Habitat Moderne à Montréal. Un service humain et personnalisé depuis 1965."
-      />
+      <title>{t("contactUs.title")}</title>
+      <meta name="description" content={t("contactUs.metaDescription")} />
       <main className="max-w-4xl mx-auto px-6 pt-12">
         <h1 className="text-3xl font-bold mb-8 text-slate-800">
           Contactez-nous
@@ -22,14 +19,14 @@ export default function ContactUs() {
             <div className="flex items-center gap-3 mb-6 text-blue-600">
               <Phone className="w-6 h-6 text-slate-500" />
               <h2 className="text-xl font-semibold text-slate-800">
-                Téléphones
+                {t("contactUs.phone")}
               </h2>
             </div>
 
             <div className="space-y-4">
               <div className="flex flex-col">
                 <span className="text-sm text-slate-500 uppercase tracking-wide font-medium">
-                  Administration
+                  {t("contactUs.administration")}
                 </span>
                 {/* Phone Mobile */}
                 <a
@@ -46,7 +43,7 @@ export default function ContactUs() {
 
               <div className="flex flex-col">
                 <span className="text-sm text-slate-500 uppercase tracking-wide font-medium">
-                  Location
+                  {t("contactUs.rental")}
                 </span>
                 {/* Phone Mobile */}
                 <a
@@ -64,7 +61,7 @@ export default function ContactUs() {
               <div className="pt-4 border-t border-slate-100 flex items-center gap-3 text-slate-600">
                 <Printer className="w-6 h-6 text-slate-500" />
                 <h2 className="text-xl font-semibold text-slate-800">
-                  Télécopieur
+                  {t("contactUs.fax")}
                 </h2>
               </div>
               <p className={`${numberStyle} text-slate-800`}>514-761-0110</p>
@@ -76,7 +73,7 @@ export default function ContactUs() {
               <div className="flex items-center gap-3 mb-6 text-blue-600">
                 <Mail className="w-6 h-6 text-slate-500" />
                 <h2 className="text-xl font-semibold text-slate-800">
-                  Courriel
+                  {t("contactUs.email")}
                 </h2>
               </div>
               <a

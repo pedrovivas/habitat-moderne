@@ -1,4 +1,14 @@
-export default function ContactMethodSelect({ id, value, onChange, touched, disabled }) {
+import { useTranslation } from "react-i18next";
+
+export default function ContactMethodSelect({
+  id,
+  value,
+  onChange,
+  touched,
+  disabled,
+}) {
+  const { t } = useTranslation();
+
   const isValid = value === "email" || value === "phone";
   const showError = touched && !isValid;
 
@@ -17,7 +27,7 @@ export default function ContactMethodSelect({ id, value, onChange, touched, disa
         htmlFor={id}
         className="text-xs font-bold text-slate-400 uppercase ml-1"
       >
-        Méthode de contact préférée
+        {t("form.contactMethod.label")}
       </label>
 
       <select
@@ -27,14 +37,16 @@ export default function ContactMethodSelect({ id, value, onChange, touched, disa
         disabled={disabled}
         className={`${baseClasses} ${stateClasses}`}
       >
-        <option value="" disabled>Choisir une option</option>
-        <option value="email">Courriel</option>
-        <option value="phone">Téléphone</option>
+        <option value="" disabled>
+          {t("form.contactMethod.placeholder")}
+        </option>
+        <option value="email">{t("form.email.label")}</option>
+        <option value="phone">{t("form.phone.label")}</option>
       </select>
 
       {showError && (
         <p className="text-xs text-red-500 ml-1">
-          Veuillez sélectionner une méthode de contact.
+          {t("form.contactMethod.error")}
         </p>
       )}
     </div>

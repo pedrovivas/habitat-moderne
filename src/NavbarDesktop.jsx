@@ -1,8 +1,14 @@
 import { NavLink } from "react-router";
-import { navLinks } from "./navLinks";
+import { useTranslation } from "react-i18next";
 import LogOutButton from "./LogOutButton";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { getNavLinks } from "./navLinks";
 
 export default function NavbarDesktop({ isAuthenticated, handleLogout }) {
+  const { t } = useTranslation();
+
+  const navLinks = getNavLinks(t);
+
   return (
     <ul className="hidden md:flex gap-6 items-center">
       {navLinks.map((link) => (
@@ -24,6 +30,10 @@ export default function NavbarDesktop({ isAuthenticated, handleLogout }) {
           <LogOutButton onClick={handleLogout} />
         </li>
       )}
+
+      <li>
+        <LanguageSwitcher />
+      </li>
     </ul>
   );
 }

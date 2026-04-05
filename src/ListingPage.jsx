@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import fetchApartments from "../services/apartmentService";
 import { Search, AlertCircle } from "lucide-react";
 import Apartment from "./Apartment";
@@ -7,6 +8,7 @@ import Form from "./Form";
 
 export default function ListingsPage() {
   const isAdmin = localStorage.getItem("admin") === "true";
+  const { t } = useTranslation();
 
   const {
     data: listings,
@@ -22,12 +24,12 @@ export default function ListingsPage() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50">
-        <title>Chargement... | Habitat Moderne inc.</title>
+        <title>{t("apartmentsListing.titleLoading")}</title>
         <div className="relative">
           <div className="w-16 h-16 border-4 border-slate-200 border-t-primary rounded-full animate-spin"></div>
         </div>
         <p className="mt-4 text-slate-500 font-medium animate-pulse">
-          Chargement en cours...
+          {t("apartmentsListing.loadingMessage")}
         </p>
       </div>
     );
@@ -36,21 +38,22 @@ export default function ListingsPage() {
   if (isError) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-50 px-4">
-        <title>Erreur de chargement | Habitat Moderne inc.</title>
+        <title>{t("apartmentsListing.titleError")}</title>
         <meta name="robots" content="noindex" />
         <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md text-center border border-red-100">
           <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertCircle size={32} />
           </div>
-          <h2 className="text-xl font-bold text-slate-800 mb-2">
-            Connection Error
-          </h2>
-          <p className="text-slate-500 mb-6">{error.message}</p>
+          <h1 className="text-xl font-bold text-slate-800 mb-4">
+            {t("apartmentsListing.errorMessage")}
+          </h1>
+          {/* Error message from backend */}
+          {/* <p className="text-slate-500 mb-6">{error.message}</p> */}
           <button
             onClick={() => refetch()}
             className="w-full py-3 bg-primary text-slate-900 rounded-xl font-bold hover:bg-secondary transition-all"
           >
-            Try Again
+            {t("apartmentsListing.errorCta")}
           </button>
         </div>
       </div>
@@ -63,16 +66,16 @@ export default function ListingsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
-      <title>Habitat Moderne inc. | Appartements à louer à Montréal</title>
+      <title>{t("apartmentsListing.title")}</title>
       <meta
         name="description"
-        content="Découvrez nos appartements rénovés avec goût à Montréal. Une entreprise familiale établie depuis 1965."
+        content={t("apartmentsListing.metaDescription")}
       />
       <main className="max-w-7xl mx-auto px-6 pt-8">
         <div className="mb-10 space-y-4">
-          <h2 className="text-3xl font-bold text-slate-800 tracking-tight">
-            Appartements disponibles
-          </h2>
+          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">
+            {t("apartmentsListing.h1")}
+          </h1>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -88,7 +91,7 @@ export default function ListingsPage() {
                 <Search size={32} />
               </div>
               <p className="text-lg text-slate-500 font-medium mb-6">
-                Aucun logement disponible pour le moment.
+                {t("apartmentsListing.noApartmentsMessage")}
               </p>
               <Form showPhone={false} showContactMethod={false} />
             </div>

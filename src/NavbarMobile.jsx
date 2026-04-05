@@ -1,6 +1,8 @@
 import { NavLink } from "react-router";
-import { navLinks } from "./navLinks";
+import { useTranslation } from "react-i18next";
 import LogOutButton from "./LogOutButton";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { getNavLinks } from "./navLinks";
 
 export default function NavbarMobile({
   isOpen,
@@ -8,7 +10,11 @@ export default function NavbarMobile({
   isAuthenticated,
   handleLogout,
 }) {
+  const { t } = useTranslation();
+
   if (!isOpen) return null;
+
+  const navLinks = getNavLinks(t);
 
   return (
     <div className="md:hidden bg-primary px-6 py-4">
@@ -36,6 +42,10 @@ export default function NavbarMobile({
             />
           </li>
         )}
+
+        <li>
+          <LanguageSwitcher />
+        </li>
       </ul>
     </div>
   );

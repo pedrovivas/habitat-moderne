@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useId, useState } from "react";
 import PhoneInput from "./PhoneInput";
 import EmailInput from "./EmailInput";
@@ -10,6 +11,7 @@ export default function Form({
   showPhone = true,
   showContactMethod = true,
 }) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -48,9 +50,9 @@ export default function Form({
     setStatus("sending");
 
     const dataToSend = {
-    ...formData,
-    apartmentId: address,
-    message: formData.message.trim(),
+      ...formData,
+      apartmentId: address,
+      message: formData.message.trim(),
     };
 
     try {
@@ -84,10 +86,10 @@ export default function Form({
     <div className="lg:col-span-1">
       <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 sticky top-24 space-y-4">
         <div className="space-y-2 text-center">
-          <h3 className="text-xl font-bold">Intéressé par ce bien ?</h3>
+          <h3 className="text-xl font-bold">{t("form.h3")}</h3>
           {status === "success" && (
             <p className="text-green-600 font-semibold transition-opacity duration-500">
-              Email envoyé au propriétaire !
+              {t("form.emailSendSuccess")}
             </p>
           )}
         </div>
@@ -135,7 +137,11 @@ export default function Form({
                 : "bg-primary hover:bg-secondary"
             }`}
           >
-            {status === "sending" ? "Envoi..." : "Contacter le propriétaire"}
+            {status === "sending" ? (
+              <span className="animate-pulse">...</span>
+            ) : (
+              t("form.cta")
+            )}
           </button>
         </form>
       </div>
