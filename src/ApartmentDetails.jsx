@@ -1,6 +1,7 @@
 import { useParams, Link, useNavigate } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import {
   ArrowLeft,
@@ -24,6 +25,7 @@ export default function ApartmentDetails() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const { t } = useTranslation();
 
   // Security & Admin check
   const isAdmin = localStorage.getItem("admin") === "true";
@@ -146,7 +148,7 @@ export default function ApartmentDetails() {
             className="inline-flex items-center gap-2 text-slate-600 hover:opacity-80 transition font-medium group"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition" />{" "}
-            Retour à la recherche
+            {t("apartmentDetails.backToListing")}
           </Link>
 
           {isAdmin && (
@@ -192,7 +194,7 @@ export default function ApartmentDetails() {
                   {Math.floor(apartment.price)} $
                   <span className="text-sm text-slate-400 font-normal uppercase tracking-widest">
                     {" "}
-                    / mois
+                    / {t("apartmentDetails.month")}
                   </span>
                 </div>
               </div>
@@ -202,26 +204,26 @@ export default function ApartmentDetails() {
                 <div className="flex flex-col items-center text-slate-500 text-center gap-1">
                   <Bed className="w-6 h-6" />
                   <p className="font-bold text-lg">
-                    {apartment.bedrooms} Chambres
+                    {apartment.bedrooms} {t("apartmentDetails.rooms")}
                   </p>
                 </div>
                 <div className="flex flex-col items-center text-slate-500 text-center gap-1 border-x border-slate-100">
                   <Bath className="w-6 h-6" />
                   <p className="font-bold text-lg">
-                    {apartment.bathrooms} Bains
+                    {apartment.bathrooms} {t("apartmentDetails.bathrooms")}
                   </p>
                 </div>
                 {apartment.sqft > 0 && (
                   <div className="flex flex-col items-center text-slate-500 text-center gap-1">
                     <Maximize className="w-6 h-6" />
-                    <p className="font-bold text-lg">{apartment.sqft} pi²</p>
+                    <p className="font-bold text-lg">{apartment.sqft} {t("apartmentDetails.sqft")}</p>
                   </div>
                 )}
               </div>
 
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold text-slate-800">
-                  Description
+                  {t("apartmentDetails.description")}
                 </h2>
                 <p className="text-slate-600 leading-relaxed text-lg whitespace-pre-line">
                   {apartment.description}

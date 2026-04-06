@@ -1,7 +1,11 @@
+import { useTranslation } from "react-i18next";
+
 export default function formatAddress(
   { address, unit, neighborhood, city = "Montréal", postal_code },
   showNeighborhood = true,
 ) {
+  const { t } = useTranslation();
+
   const postalCodeFormatted = postal_code && `, QC ${postal_code}`;
 
   const cityInfo =
@@ -9,5 +13,5 @@ export default function formatAddress(
       ? `${city}${postalCodeFormatted} (${neighborhood})`
       : `${city}${postalCodeFormatted}`;
 
-  return [address, unit && `app. ${unit}`, cityInfo].filter(Boolean).join(", ");
+  return [address, unit && `${t("apartmentDetails.apartment")} ${unit}`, cityInfo].filter(Boolean).join(", ");
 }

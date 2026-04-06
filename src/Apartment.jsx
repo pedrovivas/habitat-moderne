@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Bed, Bath, Maximize, Eye, EyeOff } from "lucide-react";
 import formatAddress from "./formatAddress";
 
 export default function Apartment({ apartment }) {
+  const { t } = useTranslation();
   const isAdmin = localStorage.getItem("admin") === "true";
 
   const images = Array.isArray(apartment.images)
@@ -41,7 +43,7 @@ export default function Apartment({ apartment }) {
             <span className="text-2xl font-black text-slate-800">
               {Math.floor(apartment.price)} $
             </span>
-            <span className="text-xs text-slate-400 font-medium"> / mois</span>
+            <span className="text-xs text-slate-400 font-medium"> / {t("apartmentDetails.month")}</span>
           </div>
           <h3 className="text-xl font-bold text-slate-800 leading-tight group-hover:opacity-75 transition-colors line-clamp-2 min-h-[3.5rem]">
             {apartment.title}
@@ -61,8 +63,7 @@ export default function Apartment({ apartment }) {
           </span>
           {apartment.sqft > 0 && (
             <span className="flex items-center font-medium">
-              <Maximize size={16} className="mr-1.5" /> {apartment.sqft} pi
-              <sup>2</sup>
+              <Maximize size={16} className="mr-1.5" /> {apartment.sqft} {t("apartmentDetails.sqft")}
             </span>
           )}
           {isAdmin && (

@@ -1,9 +1,12 @@
-import {CheckCircle2} from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { CheckCircle2 } from "lucide-react";
 
 export default function ApartmentDetailsTags({ tags }) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Inclusions et commodités</h2>
+      <h2 className="text-2xl font-bold">{t("apartmentDetails.inclusions")}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {tags.map((item, idx) => (
           <div

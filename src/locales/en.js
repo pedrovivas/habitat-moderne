@@ -36,6 +36,16 @@ export const en = {
     h1: "Apartments Available",
     noApartmentsMessage: "No apartments available at the moment.",
   },
+  apartmentDetails: {
+    backToListing: "Back to Apartment Listing",
+    rooms: "Bedrooms",
+    bathrooms: "Bathrooms",
+    sqft: "ft²",
+    month: "month",
+    description: "Description",
+    inclusions: "Inclusions and Amenities",
+    apartment: "apt.",
+  },
   form: {
     h3: "Request Information",
     emailSendSuccess: "Email sent to the landlord!",
