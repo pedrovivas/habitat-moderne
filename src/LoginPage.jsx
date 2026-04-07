@@ -73,6 +73,7 @@ export default function LoginPage() {
       localStorage.setItem("admin", "true");
 
       navigate(from, { replace: true });
+      window.location.reload();
     } catch (err) {
       console.error(err);
       toast.error("Erreur serveur");

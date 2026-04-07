@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import toast from "react-hot-toast";
@@ -8,10 +8,10 @@ import NavbarMobile from "./NavbarMobile";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
-  // ✅ Vérifie si admin est connecté
-  const isAuthenticated = !!localStorage.getItem("admin");
-
   const navigate = useNavigate();
+const [isAuthenticated, setIsAuthenticated] = useState(
+  !!localStorage.getItem("admin")
+);
 
   function toggleMenu() {
     setIsOpen((prev) => !prev);
@@ -23,6 +23,7 @@ export default function Navbar() {
 
   function handleLogout() {
     localStorage.removeItem("admin");
+    setIsAuthenticated(false)
     toast.success("Déconnecté avec succès");
     navigate("/admin/login");
   }
