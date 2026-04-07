@@ -60,6 +60,18 @@ export default function ApartmentDetails() {
     }
   })();
 
+  const predefinedTagsList = t("apartmentForm.predefinedTags", {
+    returnObjects: true,
+  });
+
+  const translatedTags = tags.map((tagId) => {
+    const foundTag = Array.isArray(predefinedTagsList)
+      ? predefinedTagsList.find((pt) => pt.id === tagId)
+      : null;
+
+    return foundTag ? foundTag.label : tagId;
+  });
+
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
   }, []);
@@ -131,7 +143,6 @@ export default function ApartmentDetails() {
       </>
     );
   }
-    
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
@@ -216,7 +227,9 @@ export default function ApartmentDetails() {
                 {apartment.sqft > 0 && (
                   <div className="flex flex-col items-center text-slate-500 text-center gap-1">
                     <Maximize className="w-6 h-6" />
-                    <p className="font-bold text-lg">{apartment.sqft} {t("apartmentDetails.sqft")}</p>
+                    <p className="font-bold text-lg">
+                      {apartment.sqft} {t("apartmentDetails.sqft")}
+                    </p>
                   </div>
                 )}
               </div>
@@ -230,7 +243,9 @@ export default function ApartmentDetails() {
                 </p>
               </div>
 
-              {tags.length > 0 && <ApartmentDetailsTags tags={tags} />}
+              {translatedTags.length > 0 && (
+                <ApartmentDetailsTags tags={translatedTags} />
+              )}
             </div>
           </div>
 

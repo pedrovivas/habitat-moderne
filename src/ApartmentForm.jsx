@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { addApartment } from "../services/apartmentService.js";
 
 export default function ApartmentForm({ onAdded }) {
+  const { t } = useTranslation();
 
   const [toast, setToast] = useState({
     message: "",
@@ -17,23 +19,9 @@ export default function ApartmentForm({ onAdded }) {
     }, 3000);
   };
 
-  const predefinedTags = [
-    "Chauffé",
-    "Eau chaude",
-    "Cuisinière incluse",
-    "Frigo inclus",
-    "Garage disponible",
-    "Stationnement disponible",
-    "Ascenseur",
-    "Rampe d’accès handicapé",
-    "Air climatisée",
-    "Rangement",
-    "Installation laveuse- sécheuse",
-    "Buanderie sur place",
-    "Installation lave-vaisselle",
-    "Concierge sur place",
-    "Intercom",
-  ];
+  const predefinedTags = t("apartmentForm.predefinedTags", {
+    returnObjects: true,
+  });
 
   const [form, setForm] = useState({
     title: "",
@@ -46,7 +34,7 @@ export default function ApartmentForm({ onAdded }) {
     sqft: "",
     neighborhood: "",
     description: "",
-    tags: [],
+    tags: [], // Now stores stable IDs like ["heated", "garage"]
     visible: "",
     availability: "",
   });
@@ -60,18 +48,18 @@ export default function ApartmentForm({ onAdded }) {
   };
 
   const handlePredefinedTags = (e) => {
-    const value = e.target.value;
+    const selectedId = e.target.value;
 
     setForm((prev) => {
-      if (prev.tags.includes(value)) {
+      if (prev.tags.includes(selectedId)) {
         return {
           ...prev,
-          tags: prev.tags.filter((tag) => tag !== value),
+          tags: prev.tags.filter((tag) => tag !== selectedId),
         };
       } else {
         return {
           ...prev,
-          tags: [...prev.tags, value],
+          tags: [...prev.tags, selectedId],
         };
       }
     });
@@ -122,6 +110,7 @@ export default function ApartmentForm({ onAdded }) {
 
     for (const key in form) {
       if (key === "tags") {
+        // This will send the array of IDs (and manual strings) to your backend
         formData.append("tags", JSON.stringify(form.tags));
       } else {
         formData.append(key, form[key]);
@@ -164,9 +153,7 @@ export default function ApartmentForm({ onAdded }) {
       {toast.visible && (
         <div
           className={`fixed top-6 right-6 z-50 px-6 py-4 rounded-lg shadow-lg text-white font-semibold transition-all duration-300 ${
-            toast.type === "success"
-              ? "bg-green-500"
-              : "bg-red-500"
+            toast.type === "success" ? "bg-green-500" : "bg-red-500"
           }`}
         >
           {toast.message}
@@ -229,20 +216,20 @@ export default function ApartmentForm({ onAdded }) {
           </label>
         </div>
 
-              <div>
-        <label className="block mb-1 font-semibold text-gray-700">
-          Disponibilité
-        </label>
+        <div>
+          <label className="block mb-1 font-semibold text-gray-700">
+            Disponibilité
+          </label>
 
-        <input
-          type="text"
-          name="availability"
-          placeholder="Ex: Disponible maintenant, 1 Juillet, 1 Août..."
-          value={form.availability}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg"
-        />
-      </div>
+          <input
+            type="text"
+            name="availability"
+            placeholder="Ex: Disponible maintenant, 1 Juillet, 1 Août..."
+            value={form.availability}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-lg"
+          />
+        </div>
 
         <div>
           <label className="block mb-2 font-semibold">Images</label>
@@ -294,11 +281,12 @@ export default function ApartmentForm({ onAdded }) {
             onChange={handlePredefinedTags}
             className="w-full p-3 border rounded-lg h-32 mb-4"
           >
-            {predefinedTags.map((tag) => (
-              <option key={tag} value={tag}>
-                {tag}
-              </option>
-            ))}
+            {Array.isArray(predefinedTags) &&
+              predefinedTags.map((tag) => (
+                <option key={tag.id} value={tag.id}>
+                  {tag.label}
+                </option>
+              ))}
           </select>
 
           <label className="block mb-1 font-semibold">Tags personnalisés</label>
@@ -312,26 +300,34 @@ export default function ApartmentForm({ onAdded }) {
           />
 
           <div className="mt-3 flex flex-wrap gap-2">
-            {form.tags.map((tag) => (
-              <span
-                key={tag}
-                className="flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm"
-              >
-                {tag}
-                <button
-                  type="button"
-                  onClick={() =>
-                    setForm((prev) => ({
-                      ...prev,
-                      tags: prev.tags.filter((t) => t !== tag),
-                    }))
-                  }
-                  className="text-red-500 font-bold"
+            {form.tags.map((tagId) => {
+              const tagData = Array.isArray(predefinedTags)
+                ? predefinedTags.find((t) => t.id === tagId)
+                : null;
+
+              const displayLabel = tagData ? tagData.label : tagId;
+
+              return (
+                <span
+                  key={tagId}
+                  className="flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm"
                 >
-                  ×
-                </button>
-              </span>
-            ))}
+                  {displayLabel}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setForm((prev) => ({
+                        ...prev,
+                        tags: prev.tags.filter((t) => t !== tagId),
+                      }))
+                    }
+                    className="text-red-500 font-bold"
+                  >
+                    ×
+                  </button>
+                </span>
+              );
+            })}
 
             {manualTagsInput && (
               <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm opacity-70">
