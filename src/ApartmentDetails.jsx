@@ -25,7 +25,8 @@ export default function ApartmentDetails() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [isMapOpen, setIsMapOpen] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language?.startsWith("en") ? "en" : "fr";
 
   // Security & Admin check
   const isAdmin = localStorage.getItem("admin") === "true";
@@ -64,13 +65,44 @@ export default function ApartmentDetails() {
     returnObjects: true,
   });
 
-  const translatedTags = tags.map((tagId) => {
-    const foundTag = Array.isArray(predefinedTagsList)
-      ? predefinedTagsList.find((pt) => pt.id === tagId)
-      : null;
+  // Tags prédéfinis : uniquement ceux qui ont un match réel
+  const translatedTags = tags
+    .map((tagId) => {
+      const foundTag = Array.isArray(predefinedTagsList)
+        ? predefinedTagsList.find((pt) => pt.id === tagId)
+        : null;
+      return foundTag ? foundTag.label : null;
+    })
+    .filter(Boolean);
 
-    return foundTag ? foundTag.label : tagId;
-  });
+  // Tags personnalisés bilingues (nouveau format) ou anciens strings (fallback)
+  const customTagsLabels = (() => {
+    try {
+      let data = apartment?.custom_tags;
+      while (typeof data === "string") {
+        data = JSON.parse(data);
+      }
+      if (Array.isArray(data) && data.length > 0) {
+        const lang = i18n.language?.startsWith("en") ? "en" : "fr";
+        return data
+          .map((tag) => {
+            if (typeof tag !== "object" || tag === null) return String(tag);
+            return lang === "en" ? (tag.en || "") : (tag.fr || "");
+          })
+          .filter(Boolean);
+      }
+      // Fallback : ancien format (strings brutes dans tags non prédéfinis)
+      return tags.filter(
+        (tagId) =>
+          typeof tagId === "string" &&
+          !(Array.isArray(predefinedTagsList) && predefinedTagsList.find((pt) => pt.id === tagId))
+      );
+    } catch (e) {
+      return [];
+    }
+  })();
+
+  const allTags = [...translatedTags, ...customTagsLabels];
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
@@ -146,11 +178,19 @@ export default function ApartmentDetails() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
-      <title>{`${apartment.title} | Habitat Moderne Inc.`}</title>
-      <meta
-        name="description"
-        content={`Consultez les détails de ce logement : ${apartment.title} à ${apartment.city || "Montréal"}. ${apartment.bedrooms} chambres. Géré par Habitat Moderne inc.`}
-      />
+      {(() => {
+        const title = (lang === "en" ? apartment.title_en : apartment.title_fr) || apartment.title || "";
+        const description = (lang === "en" ? apartment.description_en : apartment.description_fr) || apartment.description || "";
+        return (
+          <>
+            <title>{`${title} | Habitat Moderne Inc.`}</title>
+            <meta
+              name="description"
+              content={`${description.slice(0, 120)} — Habitat Moderne inc.`}
+            />
+          </>
+        );
+      })()}
       <main className="max-w-7xl mx-auto px-6 pt-8">
         {/* Navigation Top Bar */}
         <div className="flex justify-between items-center mb-6">
@@ -191,7 +231,7 @@ export default function ApartmentDetails() {
               <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
                 <div className="space-y-2">
                   <h1 className="text-4xl font-black text-slate-900 leading-tight">
-                    {apartment.title}
+                    {(lang === "en" ? apartment.title_en : apartment.title_fr) || apartment.title}
                   </h1>
                   <button
                     onClick={() => setIsMapOpen(true)}
@@ -239,12 +279,12 @@ export default function ApartmentDetails() {
                   {t("apartmentDetails.description")}
                 </h2>
                 <p className="text-slate-600 leading-relaxed text-lg whitespace-pre-line">
-                  {apartment.description}
+                  {(lang === "en" ? apartment.description_en : apartment.description_fr) || apartment.description}
                 </p>
               </div>
 
-              {translatedTags.length > 0 && (
-                <ApartmentDetailsTags tags={translatedTags} />
+              {allTags.length > 0 && (
+                <ApartmentDetailsTags tags={allTags} />
               )}
             </div>
           </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import fetchApartments from "../services/apartmentService";
 import toast from "react-hot-toast";
 
@@ -8,9 +9,13 @@ export default function EditApartmentPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
+
+  const predefinedTags = t("apartmentForm.predefinedTags", { returnObjects: true });
 
   const [formData, setFormData] = useState({
-    title: "",
+    title_fr: "",
+    title_en: "",
     address: "",
     unit: "",
     postalCode: "",
@@ -19,23 +24,24 @@ export default function EditApartmentPage() {
     bathrooms: "",
     sqft: "",
     neighborhood: "",
-    description: "",
+    description_fr: "",
+    description_en: "",
     tags: [],
+    customTags: [],
     visible: "",
-    availability: "",
+    availability_fr: "",
+    availability_en: "",
   });
 
   const [existingImages, setExistingImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
+  const [manualTagInput, setManualTagInput] = useState({ fr: "", en: "" });
 
-  const cachedApartments = queryClient.getQueryData(["apartments"]);
-  const { data: fetchedApartments } = useQuery({
+  const { data: apartments = [] } = useQuery({
     queryKey: ["apartments"],
     queryFn: fetchApartments,
-    enabled: !cachedApartments,
   });
 
-  const apartments = cachedApartments || fetchedApartments || [];
   const apartment = apartments.find((apt) => Number(apt.id) === Number(id));
 
   useEffect(() => {
@@ -43,46 +49,62 @@ export default function EditApartmentPage() {
 
     const tagsArray = apartment.tags
       ? (() => {
-          try {
-            const firstParse = JSON.parse(apartment.tags);
-            return Array.isArray(firstParse)
-              ? firstParse
-              : JSON.parse(firstParse);
-          } catch (err) {
-            console.error("Erreur parsing tags:", err, apartment.tags);
-            return [];
-          }
-        })()
+        try {
+          const firstParse = JSON.parse(apartment.tags);
+          return Array.isArray(firstParse)
+            ? firstParse
+            : JSON.parse(firstParse);
+        } catch (err) {
+          console.error("Erreur parsing tags:", err, apartment.tags);
+          return [];
+        }
+      })()
+      : [];
+
+    const customTagsArray = apartment.custom_tags
+      ? (() => {
+        try {
+          const parsed = JSON.parse(apartment.custom_tags);
+          return Array.isArray(parsed) ? parsed : [];
+        } catch (err) {
+          console.error("Erreur parsing custom_tags:", err);
+          return [];
+        }
+      })()
       : [];
 
     setFormData({
-      title: apartment.title,
-      address: apartment.address,
-      unit: apartment.unit,
-      postalCode: apartment.postal_code,
-      price: apartment.price,
-      bedrooms: apartment.bedrooms,
-      bathrooms: apartment.bathrooms,
-      sqft: apartment.sqft,
-      neighborhood: apartment.neighborhood,
-      description: apartment.description,
+      title_fr: apartment.title_fr || apartment.title || "",
+      title_en: apartment.title_en || "",
+      address: apartment.address || "",
+      unit: apartment.unit || "",
+      postalCode: apartment.postal_code || "",
+      price: apartment.price || "",
+      bedrooms: apartment.bedrooms || "",
+      bathrooms: apartment.bathrooms || "",
+      sqft: apartment.sqft || "",
+      neighborhood: apartment.neighborhood || "",
+      description_fr: apartment.description_fr || apartment.description || "",
+      description_en: apartment.description_en || "",
       tags: tagsArray,
+      customTags: customTagsArray,
       visible: apartment.visible,
-      availability: apartment.availability,
+      availability_fr: apartment.availability_fr || apartment.availability || "",
+      availability_en: apartment.availability_en || "",
     });
 
     const imagesArray = apartment.images
       ? (() => {
-          try {
-            const firstParse = JSON.parse(apartment.images);
-            return Array.isArray(firstParse)
-              ? firstParse
-              : JSON.parse(firstParse);
-          } catch (err) {
-            console.error("Erreur parsing images:", err, apartment.images);
-            return [];
-          }
-        })()
+        try {
+          const firstParse = JSON.parse(apartment.images);
+          return Array.isArray(firstParse)
+            ? firstParse
+            : JSON.parse(firstParse);
+        } catch (err) {
+          console.error("Erreur parsing images:", err, apartment.images);
+          return [];
+        }
+      })()
       : [];
 
     setExistingImages(imagesArray);
@@ -95,11 +117,29 @@ export default function EditApartmentPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleTagsChange = (e) => {
+  const handleManualTagInputChange = (e) => {
+    const { name, value } = e.target;
+    setManualTagInput((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddCustomTag = () => {
+    const frTrimmed = manualTagInput.fr.trim();
+    const enTrimmed = manualTagInput.en.trim();
+
+    if (!frTrimmed && !enTrimmed) return;
+
     setFormData((prev) => ({
       ...prev,
-      tags: e.target.value.split(",").map((t) => t.trim()),
+      customTags: [...prev.customTags, { fr: frTrimmed, en: enTrimmed }],
     }));
+
+    setManualTagInput({ fr: "", en: "" });
+  };
+
+  const handleTagInputKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
   };
 
   const handleNewImages = (e) => {
@@ -109,30 +149,35 @@ export default function EditApartmentPage() {
 
   const handleRemoveExistingImage = (imgName) => {
     setExistingImages(existingImages.filter((img) => img !== imgName));
-  }; // Gérer le drop d'images
+  };
+
   const handleDrop = (e) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
     setNewImages((prev) => [...prev, ...files]);
   };
 
-  // Autoriser le drag over
   const handleDragOver = (e) => {
     e.preventDefault();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const payload = new FormData();
 
       for (const key in formData) {
-        if (key === "tags") payload.append(key, JSON.stringify(formData[key]));
-        else payload.append(key, formData[key]);
+        if (key === "tags") {
+          payload.append(key, JSON.stringify(formData[key]));
+        } else if (key === "customTags") {
+          payload.append(key, JSON.stringify(formData[key]));
+        } else {
+          payload.append(key, formData[key]);
+        }
       }
 
       payload.append("existingImages", JSON.stringify(existingImages));
-
       newImages.forEach((file) => payload.append("images", file));
 
       const res = await fetch(`http://localhost:5000/api/apartments/${id}`, {
@@ -141,28 +186,54 @@ export default function EditApartmentPage() {
       });
 
       if (!res.ok) throw new Error("Erreur lors de la modification");
+
+      const updatedApartment = await res.json();
+
+      queryClient.setQueryData(["apartments"], (old = []) =>
+        old.map((apt) =>
+          apt.id === updatedApartment.id ? updatedApartment : apt
+        )
+      );
+
+      await queryClient.invalidateQueries(["apartments"]);
+
       toast.success("Appartement modifié avec succès 🎉");
 
-      queryClient.invalidateQueries(["apartments"]);
       navigate(`/appartements/${id}`);
     } catch (err) {
       console.error(err);
-      toast.success("Appartement modifié avec succès 🎉");
+      toast.error("Erreur lors de la modification ❌");
     }
   };
 
   return (
     <div className="max-w-3xl mx-auto py-10">
       <h1 className="text-3xl font-bold mb-6">Modifier l'appartement</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
+
+        {/* Titre bilingue */}
         <div>
-          <label className="block font-medium">Titre</label>
-          <input
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
-          />
+          <label className="block font-semibold mb-1">Titre</label>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇫🇷 Français</span>
+              <input
+                name="title_fr"
+                value={formData.title_fr}
+                onChange={handleChange}
+                className="w-full border px-3 py-2 rounded"
+              />
+            </div>
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇬🇧 English</span>
+              <input
+                name="title_en"
+                value={formData.title_en}
+                onChange={handleChange}
+                className="w-full border px-3 py-2 rounded"
+              />
+            </div>
+          </div>
         </div>
 
         <div>
@@ -249,40 +320,177 @@ export default function EditApartmentPage() {
           />
         </div>
 
+        {/* Description bilingue */}
         <div>
-          <label className="block font-medium">Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
-          />
+          <label className="block font-semibold mb-1">Description</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇫🇷 Français</span>
+              <textarea
+                name="description_fr"
+                value={formData.description_fr}
+                onChange={handleChange}
+                rows={4}
+                className="w-full border px-3 py-2 rounded"
+              />
+            </div>
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇬🇧 English</span>
+              <textarea
+                name="description_en"
+                value={formData.description_en}
+                onChange={handleChange}
+                rows={4}
+                className="w-full border px-3 py-2 rounded"
+              />
+            </div>
+          </div>
         </div>
 
+        {/* Disponibilité bilingue */}
         <div>
-          <label className="block font-medium">
-            Tags (séparés par une virgule)
-          </label>
-          <input
-            value={formData.tags.join(", ")}
-            onChange={handleTagsChange}
-            className="w-full border px-3 py-2 rounded"
-          />
+          <label className="block font-semibold mb-1">Disponibilité</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇫🇷 Français</span>
+              <input
+                type="text"
+                name="availability_fr"
+                placeholder="Ex: Disponible maintenant, 1 Juillet..."
+                value={formData.availability_fr}
+                onChange={handleChange}
+                className="w-full border px-3 py-2 rounded"
+              />
+            </div>
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇬🇧 English</span>
+              <input
+                type="text"
+                name="availability_en"
+                placeholder="Ex: Available now, July 1st..."
+                value={formData.availability_en}
+                onChange={handleChange}
+                className="w-full border px-3 py-2 rounded"
+              />
+            </div>
+          </div>
         </div>
 
+        {/* Tags prédéfinis */}
         <div>
-          <label className="block mb-1 font-semibold text-gray-700">
-            Disponibilité
-          </label>
+          <label className="block font-semibold mb-2">Caractéristiques (sélection rapide)</label>
+          <select
+            multiple
+            onChange={(e) => {
+              const selectedId = e.target.value;
+              setFormData((prev) => ({
+                ...prev,
+                tags: prev.tags.includes(selectedId)
+                  ? prev.tags.filter((t) => t !== selectedId)
+                  : [...prev.tags, selectedId],
+              }));
+            }}
+            className="w-full p-3 border rounded-lg h-32 mb-3"
+          >
+            {Array.isArray(predefinedTags) &&
+              predefinedTags.map((tag) => (
+                <option
+                  key={tag.id}
+                  value={tag.id}
+                  style={{ fontWeight: formData.tags.includes(tag.id) ? "bold" : "normal" }}
+                >
+                  {formData.tags.includes(tag.id) ? "✓ " : ""}{tag.label}
+                </option>
+              ))}
+          </select>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {formData.tags.map((tagId) => {
+              const tagData = Array.isArray(predefinedTags)
+                ? predefinedTags.find((t) => t.id === tagId)
+                : null;
+              return (
+                <span
+                  key={tagId}
+                  className="flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm"
+                >
+                  {tagData ? tagData.label : tagId}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        tags: prev.tags.filter((t) => t !== tagId),
+                      }))
+                    }
+                    className="text-red-500 font-bold"
+                  >
+                    ×
+                  </button>
+                </span>
+              );
+            })}
+          </div>
+        </div>
 
-          <input
-            type="text"
-            name="availability"
-            placeholder="Ex: Disponible maintenant, 1 Juillet..."
-            value={formData.availability}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg"
-          />
+        {/* Tags personnalisés bilingues */}
+        <div>
+          <label className="block font-semibold mb-1">Tags personnalisés</label>
+          <div className="grid grid-cols-2 gap-3 mb-2">
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇫🇷 Français</span>
+              <input
+                type="text"
+                name="fr"
+                value={manualTagInput.fr}
+                onChange={handleManualTagInputChange}
+                onKeyDown={handleTagInputKeyDown}
+                placeholder="Ex: Vue sur parc"
+                className="w-full border px-3 py-2 rounded"
+              />
+            </div>
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇬🇧 English</span>
+              <input
+                type="text"
+                name="en"
+                value={manualTagInput.en}
+                onChange={handleManualTagInputChange}
+                onKeyDown={handleTagInputKeyDown}
+                placeholder="Ex: Park view"
+                className="w-full border px-3 py-2 rounded"
+              />
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleAddCustomTag}
+            className="text-sm px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition"
+          >
+            + Ajouter ce tag
+          </button>
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            {formData.customTags.map((tag, i) => (
+              <span
+                key={`custom-${i}`}
+                className="flex items-center gap-2 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm"
+              >
+                {tag.fr}{tag.en ? ` / ${tag.en}` : ""}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      customTags: prev.customTags.filter((_, idx) => idx !== i),
+                    }))
+                  }
+                  className="text-red-500 font-bold"
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
         </div>
 
         <div className="flex items-center gap-3 mt-2">
@@ -322,7 +530,6 @@ export default function EditApartmentPage() {
           />
 
           <div className="flex flex-wrap gap-2 mt-4">
-            {/* Images existantes */}
             {existingImages.map((img, idx) => (
               <div key={`existing-${idx}`} className="relative">
                 <img
@@ -340,7 +547,6 @@ export default function EditApartmentPage() {
               </div>
             ))}
 
-            {/* Nouvelles images ajoutées */}
             {newImages.map((file, i) => (
               <div key={`new-${i}`} className="relative">
                 <img

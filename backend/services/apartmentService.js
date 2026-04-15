@@ -2,7 +2,8 @@ import { db } from "../db/connection.js";
 
 export const createApartment = async (data, images) => {
   const {
-    title,
+    title_fr,
+    title_en,
     address,
     unit,
     postalCode,
@@ -11,18 +12,25 @@ export const createApartment = async (data, images) => {
     bathrooms,
     sqft,
     neighborhood,
-    description,
+    description_fr,
+    description_en,
     tags,
+    customTags,
     visible,
-    availability
+    availability_fr,
+    availability_en,
   } = data;
 
   const [result] = await db.execute(
-    `INSERT INTO apartments 
-      (title, address, unit, postal_code, price, bedrooms, bathrooms, sqft, neighborhood, description, tags, images, visible, availability)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO apartments
+      (title, title_fr, title_en, address, unit, postal_code, price, bedrooms, bathrooms, sqft, neighborhood,
+       description, description_fr, description_en, tags, custom_tags, images, visible,
+       availability, availability_fr, availability_en)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
-      title,
+      title_fr || null,
+      title_fr || null,
+      title_en || null,
       address,
       unit,
       postalCode,
@@ -31,11 +39,16 @@ export const createApartment = async (data, images) => {
       bathrooms,
       sqft,
       neighborhood,
-      description,
+      description_fr || null,
+      description_fr || null,
+      description_en || null,
       JSON.stringify(tags || []),
+      JSON.stringify(customTags || []),
       JSON.stringify(images || []),
       visible,
-      availability,
+      availability_fr || null,
+      availability_fr || null,
+      availability_en || null,
     ]
   );
 
@@ -57,7 +70,8 @@ export const updateApartmentById = async (id, data) => {
   const safeValue = (value) => value === undefined ? null : value;
 
   const {
-    title,
+    title_fr,
+    title_en,
     address,
     unit,
     postalCode,
@@ -66,19 +80,28 @@ export const updateApartmentById = async (id, data) => {
     bathrooms,
     sqft,
     neighborhood,
-    description,
+    description_fr,
+    description_en,
     tags,
+    customTags,
     images,
     visible,
-    availability
+    availability_fr,
+    availability_en,
   } = data;
 
   await db.execute(
-    `UPDATE apartments 
-     SET title=?, address=?, unit=?, postal_code=?, price=?, bedrooms=?, bathrooms=?, sqft=?, neighborhood=?, description=?, tags=?, images=?, visible=?, availability=?
+    `UPDATE apartments
+     SET title=?, title_fr=?, title_en=?,
+         address=?, unit=?, postal_code=?, price=?, bedrooms=?, bathrooms=?, sqft=?, neighborhood=?,
+         description=?, description_fr=?, description_en=?,
+         tags=?, custom_tags=?, images=?, visible=?,
+         availability=?, availability_fr=?, availability_en=?
      WHERE id=?`,
     [
-      safeValue(title),
+      safeValue(title_fr),
+      safeValue(title_fr),
+      safeValue(title_en),
       safeValue(address),
       safeValue(unit),
       safeValue(postalCode),
@@ -87,12 +110,17 @@ export const updateApartmentById = async (id, data) => {
       safeValue(bathrooms),
       safeValue(sqft),
       safeValue(neighborhood),
-      safeValue(description),
+      safeValue(description_fr),
+      safeValue(description_fr),
+      safeValue(description_en),
       JSON.stringify(tags || []),
+      JSON.stringify(customTags || []),
       JSON.stringify(images || []),
       safeValue(visible),
-      safeValue(availability),
-      id
+      safeValue(availability_fr),
+      safeValue(availability_fr),
+      safeValue(availability_en),
+      id,
     ]
   );
 };

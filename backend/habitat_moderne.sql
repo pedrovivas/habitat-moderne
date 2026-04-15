@@ -30,6 +30,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `apartments` (
   `id` int(11) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
+  `title_fr` varchar(255) DEFAULT NULL,
+  `title_en` varchar(255) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `unit` varchar(50) DEFAULT NULL,
   `postal_code` varchar(20) DEFAULT NULL,
@@ -39,10 +41,15 @@ CREATE TABLE `apartments` (
   `sqft` int(11) DEFAULT NULL,
   `neighborhood` varchar(255) DEFAULT NULL,
   `description` text DEFAULT NULL,
+  `description_fr` text DEFAULT NULL,
+  `description_en` text DEFAULT NULL,
   `tags` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`tags`)),
+  `custom_tags` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `images` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`images`)),
   `visible` tinyint(1) DEFAULT 1,
-  `availability` varchar(255) DEFAULT NULL
+  `availability` varchar(255) DEFAULT NULL,
+  `availability_fr` varchar(255) DEFAULT NULL,
+  `availability_en` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

@@ -3,7 +3,8 @@ import { Bed, Bath, Maximize, Eye, EyeOff } from "lucide-react";
 import formatAddress from "./formatAddress";
 
 export default function Apartment({ apartment }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language?.startsWith("en") ? "en" : "fr";
   const isAdmin = localStorage.getItem("admin") === "true";
 
   const images = Array.isArray(apartment.images)
@@ -36,8 +37,8 @@ export default function Apartment({ apartment }) {
         <div className="mb-4">
           <span className="inline-block py-1 mb-2 text-xs font-bold uppercase tracking-wider">
             {/* Disponible maintenant */}
-            Disponible <i></i>
-            {apartment.availability || " maintenant"}
+            {lang === "en" ? "Available" : "Disponible"} <i></i>
+            {(lang === "en" ? apartment.availability_en : apartment.availability_fr) || apartment.availability || (lang === "en" ? " now" : " maintenant")}
           </span>
           <div className="mb-2">
             <span className="text-2xl font-black text-slate-800">
@@ -46,7 +47,7 @@ export default function Apartment({ apartment }) {
             <span className="text-xs text-slate-400 font-medium"> / {t("apartmentDetails.month")}</span>
           </div>
           <h3 className="text-xl font-bold text-slate-800 leading-tight group-hover:opacity-75 transition-colors line-clamp-2 min-h-[3.5rem]">
-            {apartment.title}
+            {(lang === "en" ? apartment.title_en : apartment.title_fr) || apartment.title}
           </h3>
         </div>
 

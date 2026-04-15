@@ -24,7 +24,8 @@ export default function ApartmentForm({ onAdded }) {
   });
 
   const [form, setForm] = useState({
-    title: "",
+    title_fr: "",
+    title_en: "",
     address: "",
     unit: "",
     postalCode: "",
@@ -33,14 +34,17 @@ export default function ApartmentForm({ onAdded }) {
     bathrooms: "",
     sqft: "",
     neighborhood: "",
-    description: "",
-    tags: [], // Now stores stable IDs like ["heated", "garage"]
+    description_fr: "",
+    description_en: "",
+    tags: [],
+    customTags: [],
     visible: "",
-    availability: "",
+    availability_fr: "",
+    availability_en: "",
   });
 
   const [images, setImages] = useState([]);
-  const [manualTagsInput, setManualTagsInput] = useState("");
+  const [manualTagInput, setManualTagInput] = useState({ fr: "", en: "" });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,22 +69,28 @@ export default function ApartmentForm({ onAdded }) {
     });
   };
 
-  const handleManualTags = (e) => {
-    const value = e.target.value;
+  const handleManualTagInputChange = (e) => {
+    const { name, value } = e.target;
+    setManualTagInput((prev) => ({ ...prev, [name]: value }));
+  };
 
-    if (value.endsWith(",")) {
-      const newTag = value.slice(0, -1).trim();
+  const handleAddCustomTag = () => {
+    const frTrimmed = manualTagInput.fr.trim();
+    const enTrimmed = manualTagInput.en.trim();
 
-      if (newTag !== "") {
-        setForm((prev) => ({
-          ...prev,
-          tags: [...new Set([...prev.tags, newTag])],
-        }));
-      }
+    if (!frTrimmed && !enTrimmed) return;
 
-      setManualTagsInput("");
-    } else {
-      setManualTagsInput(value);
+    setForm((prev) => ({
+      ...prev,
+      customTags: [...prev.customTags, { fr: frTrimmed, en: enTrimmed }],
+    }));
+
+    setManualTagInput({ fr: "", en: "" });
+  };
+
+  const handleTagInputKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
     }
   };
 
@@ -110,8 +120,9 @@ export default function ApartmentForm({ onAdded }) {
 
     for (const key in form) {
       if (key === "tags") {
-        // This will send the array of IDs (and manual strings) to your backend
         formData.append("tags", JSON.stringify(form.tags));
+      } else if (key === "customTags") {
+        formData.append("customTags", JSON.stringify(form.customTags));
       } else {
         formData.append(key, form[key]);
       }
@@ -125,7 +136,8 @@ export default function ApartmentForm({ onAdded }) {
       showToast("Appartement ajouté avec succès 🎉", "success");
 
       setForm({
-        title: "",
+        title_fr: "",
+        title_en: "",
         address: "",
         unit: "",
         postalCode: "",
@@ -134,14 +146,17 @@ export default function ApartmentForm({ onAdded }) {
         bathrooms: "",
         sqft: "",
         neighborhood: "",
-        description: "",
+        description_fr: "",
+        description_en: "",
         tags: [],
+        customTags: [],
         visible: "",
-        availability: "",
+        availability_fr: "",
+        availability_en: "",
       });
 
       setImages([]);
-      setManualTagsInput("");
+      setManualTagInput({ fr: "", en: "" });
     } catch (err) {
       console.error("Erreur ajout appartement:", err);
       showToast("Erreur lors de l'ajout ❌", "error");
@@ -168,9 +183,38 @@ export default function ApartmentForm({ onAdded }) {
           Ajouter un Appartement
         </h2>
 
+        {/* Titre bilingue */}
+        <div>
+          <label className="block mb-1 font-semibold text-gray-700">Titre</label>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇫🇷 Français</span>
+              <input
+                type="text"
+                name="title_fr"
+                placeholder="Titre en français"
+                value={form.title_fr}
+                onChange={handleChange}
+                className="p-3 border rounded-lg w-full"
+              />
+            </div>
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇬🇧 English</span>
+              <input
+                type="text"
+                name="title_en"
+                placeholder="Title in English"
+                value={form.title_en}
+                onChange={handleChange}
+                className="p-3 border rounded-lg w-full"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Autres champs non bilingues */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[
-            ["title", "Titre"],
             ["address", "Adresse"],
             ["unit", "Unité"],
             ["postalCode", "Code Postal"],
@@ -192,14 +236,63 @@ export default function ApartmentForm({ onAdded }) {
           ))}
         </div>
 
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleChange}
-          rows={4}
-          className="w-full p-3 border rounded-lg"
-        />
+        {/* Description bilingue */}
+        <div>
+          <label className="block mb-1 font-semibold text-gray-700">Description</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇫🇷 Français</span>
+              <textarea
+                name="description_fr"
+                placeholder="Description en français"
+                value={form.description_fr}
+                onChange={handleChange}
+                rows={4}
+                className="w-full p-3 border rounded-lg"
+              />
+            </div>
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇬🇧 English</span>
+              <textarea
+                name="description_en"
+                placeholder="Description in English"
+                value={form.description_en}
+                onChange={handleChange}
+                rows={4}
+                className="w-full p-3 border rounded-lg"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Disponibilité bilingue */}
+        <div>
+          <label className="block mb-1 font-semibold text-gray-700">Disponibilité</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇫🇷 Français</span>
+              <input
+                type="text"
+                name="availability_fr"
+                placeholder="Ex: Disponible maintenant, 1 Juillet..."
+                value={form.availability_fr}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-lg"
+              />
+            </div>
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇬🇧 English</span>
+              <input
+                type="text"
+                name="availability_en"
+                placeholder="Ex: Available now, July 1st..."
+                value={form.availability_en}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-lg"
+              />
+            </div>
+          </div>
+        </div>
 
         <div className="flex items-center gap-3 mt-2">
           <input
@@ -214,21 +307,6 @@ export default function ApartmentForm({ onAdded }) {
           <label htmlFor="visible" className="text-gray-700 font-medium">
             Visible sur le site
           </label>
-        </div>
-
-        <div>
-          <label className="block mb-1 font-semibold text-gray-700">
-            Disponibilité
-          </label>
-
-          <input
-            type="text"
-            name="availability"
-            placeholder="Ex: Disponible maintenant, 1 Juillet, 1 Août..."
-            value={form.availability}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg"
-          />
         </div>
 
         <div>
@@ -271,6 +349,7 @@ export default function ApartmentForm({ onAdded }) {
           </div>
         </div>
 
+        {/* Tags prédéfinis */}
         <div>
           <label className="block mb-2 font-semibold">
             Caractéristiques (sélection rapide)
@@ -289,16 +368,43 @@ export default function ApartmentForm({ onAdded }) {
               ))}
           </select>
 
+          {/* Tags personnalisés bilingues */}
           <label className="block mb-1 font-semibold">Tags personnalisés</label>
+          <div className="grid grid-cols-2 gap-3 mb-2">
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇫🇷 Français</span>
+              <input
+                type="text"
+                name="fr"
+                value={manualTagInput.fr}
+                onChange={handleManualTagInputChange}
+                onKeyDown={handleTagInputKeyDown}
+                placeholder="Ex: Vue mer"
+                className="w-full p-3 border rounded-lg"
+              />
+            </div>
+            <div>
+              <span className="text-xs text-gray-500 mb-1 block">🇬🇧 English</span>
+              <input
+                type="text"
+                name="en"
+                value={manualTagInput.en}
+                onChange={handleManualTagInputChange}
+                onKeyDown={handleTagInputKeyDown}
+                placeholder="Ex: Ocean view"
+                className="w-full p-3 border rounded-lg"
+              />
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleAddCustomTag}
+            className="text-sm px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition"
+          >
+            + Ajouter ce tag
+          </button>
 
-          <input
-            type="text"
-            value={manualTagsInput}
-            onChange={handleManualTags}
-            placeholder="Ex: Vue mer, Rénové"
-            className="w-full p-3 border rounded-lg"
-          />
-
+          {/* Tags sélectionnés */}
           <div className="mt-3 flex flex-wrap gap-2">
             {form.tags.map((tagId) => {
               const tagData = Array.isArray(predefinedTags)
@@ -329,11 +435,26 @@ export default function ApartmentForm({ onAdded }) {
               );
             })}
 
-            {manualTagsInput && (
-              <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm opacity-70">
-                {manualTagsInput}
+            {form.customTags.map((tag, i) => (
+              <span
+                key={`custom-${i}`}
+                className="flex items-center gap-2 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm"
+              >
+                {tag.fr}{tag.en ? ` / ${tag.en}` : ""}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setForm((prev) => ({
+                      ...prev,
+                      customTags: prev.customTags.filter((_, idx) => idx !== i),
+                    }))
+                  }
+                  className="text-red-500 font-bold"
+                >
+                  ×
+                </button>
               </span>
-            )}
+            ))}
           </div>
         </div>
 

@@ -71,7 +71,8 @@ export const updateApartment = async (req, res) => {
     const images = [...existingImages, ...newImages];
 
     const updatedData = {
-      title: body.title,
+      title_fr: body.title_fr,
+      title_en: body.title_en,
       address: body.address,
       unit: body.unit,
       postalCode: body.postalCode,
@@ -80,11 +81,14 @@ export const updateApartment = async (req, res) => {
       bathrooms: body.bathrooms,
       sqft: body.sqft,
       neighborhood: body.neighborhood,
-      description: body.description,
+      description_fr: body.description_fr,
+      description_en: body.description_en,
       tags: body.tags ? JSON.parse(body.tags) : [],
+      customTags: body.customTags ? JSON.parse(body.customTags) : [],
       images: images,
       visible: body.visible === "true" || body.visible === true ? 1 : 0,
-      availability: body.availability,
+      availability_fr: body.availability_fr,
+      availability_en: body.availability_en,
     };
 
     await updateApartmentById(id, updatedData);
