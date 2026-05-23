@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 import toast from "react-hot-toast";
+import API_URL from "./config";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login-request", {
+      const res = await fetch(`${API_URL}/api/auth/login-request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +53,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/verify-code", {
+      const res = await fetch(`${API_URL}/api/auth/verify-code`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

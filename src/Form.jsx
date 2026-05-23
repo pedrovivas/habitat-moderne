@@ -3,6 +3,7 @@ import { useId, useState } from "react";
 import PhoneInput from "./PhoneInput";
 import EmailInput from "./EmailInput";
 import FullNameInput from "./FullNameInput";
+import API_URL from "./config";
 import ContactMethodSelect from "./ContactMethodSelect";
 import MessageInput from "./MessageInput";
 
@@ -28,7 +29,14 @@ export default function Form({
   const contactMethodId = useId();
   const messageId = useId();
 
-  const isButtonDisabled = status === "sending";
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isFormValid =
+    formData.fullName.trim().length >= 2 &&
+    (formData.contactMethod === "email" || formData.contactMethod === "phone") &&
+    (formData.contactMethod !== "email" || emailRegex.test(formData.email)) &&
+    (formData.contactMethod !== "phone" || formData.phone.length === 10);
+
+  const isButtonDisabled = status === "sending" || !isFormValid;
 
   function handleChange(field, value) {
     setFormData((prev) => ({
@@ -56,7 +64,7 @@ export default function Form({
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/email", {
+      const res = await fetch(`${API_URL}/api/email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dataToSend),

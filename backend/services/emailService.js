@@ -3,19 +3,24 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const EMAIL_USER = process.env.EMAIL_USER?.replace(/^["']|["']$/g, "");
+const EMAIL_PASS = process.env.EMAIL_PASS?.replace(/^["']|["']$/g, "");
+const OWNER_EMAIL = process.env.OWNER_EMAIL?.replace(/^["']|["']$/g, "");
+
+const createTransporter = () => nodemailer.createTransport({
+  host: process.env.HOST,
+  port: Number(process.env.PORT),
+  secure: Number(process.env.PORT) === 465,
+  auth: { user: EMAIL_USER, pass: EMAIL_PASS },
+});
+
 export const sendEmailToOwner = async ({ fullName, email, phone, contactMethod, message, apartmentId }) => {
-  const transporter = nodemailer.createTransport({
-    host: process.env.HOST,
-    port: process.env.PORT,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-  });
+  const transporter = createTransporter();
 
   const mailOptions = {
-    from: `"${fullName}" <${email || process.env.EMAIL_USER}>`,
-    to: process.env.OWNER_EMAIL,
+    from: `"Habitat Moderne" <${EMAIL_USER}>`,
+    replyTo: email ? `"${fullName}" <${email}>` : EMAIL_USER,
+    to: OWNER_EMAIL,
     subject: `Nouvelle demande pour l'appartement ${apartmentId}`,
     html: `
     <div style="font-family: 'Inter', sans-serif; background-color: #f8fafc; padding: 20px;">
@@ -50,17 +55,10 @@ export const sendEmailToOwner = async ({ fullName, email, phone, contactMethod, 
 };
 
 export const sendLoginCode = async ({ email, code }) => {
-  const transporter = nodemailer.createTransport({
-    host: process.env.HOST,
-    port: process.env.PORT,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-  });
+  const transporter = createTransporter();
 
   const mailOptions = {
-    from: `"Habitat Moderne" <${process.env.EMAIL_USER}>`,
+    from: `"Habitat Moderne" <${EMAIL_USER}>`,
     to: email,
     subject: "Votre code de connexion",
     html: `
@@ -74,7 +72,7 @@ export const sendLoginCode = async ({ email, code }) => {
             Votre code de connexion est : <strong>${code}</strong>
           </p>
           <p style="color: #64748b; font-size: 14px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
-            Ce code est valable 5 minutes.
+            Ce code est valable 10 minutes.
           </p>
         </div>
       </div>

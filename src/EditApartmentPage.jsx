@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import fetchApartments from "../services/apartmentService";
+import API_URL from "./config";
 import toast from "react-hot-toast";
 
 export default function EditApartmentPage() {
@@ -180,20 +181,12 @@ export default function EditApartmentPage() {
       payload.append("existingImages", JSON.stringify(existingImages));
       newImages.forEach((file) => payload.append("images", file));
 
-      const res = await fetch(`http://localhost:5000/api/apartments/${id}`, {
+      const res = await fetch(`${API_URL}/api/apartments/${id}`, {
         method: "PUT",
         body: payload,
       });
 
       if (!res.ok) throw new Error("Erreur lors de la modification");
-
-      const updatedApartment = await res.json();
-
-      queryClient.setQueryData(["apartments"], (old = []) =>
-        old.map((apt) =>
-          apt.id === updatedApartment.id ? updatedApartment : apt
-        )
-      );
 
       await queryClient.invalidateQueries(["apartments"]);
 
@@ -533,7 +526,7 @@ export default function EditApartmentPage() {
             {existingImages.map((img, idx) => (
               <div key={`existing-${idx}`} className="relative">
                 <img
-                  src={`http://localhost:5000/uploads/${img}`}
+                  src={`${API_URL}/uploads/${img}`}
                   alt="existing"
                   className="w-24 h-24 object-cover rounded shadow"
                 />

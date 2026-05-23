@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 export default function formatAddress(
-  { address, unit, neighborhood, postal_code },
+    { address, unit, neighborhood, city = "", postal_code },
   showNeighborhood = true,
 ) {
   const { t } = useTranslation();

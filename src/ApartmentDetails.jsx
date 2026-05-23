@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
+import API_URL from "./config";
 import {
   ArrowLeft,
   MapPin,
@@ -112,7 +113,7 @@ export default function ApartmentDetails() {
   const handleDelete = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/apartments/${apartment.id}`,
+        `${API_URL}/api/apartments/${apartment.id}`,
         {
           method: "DELETE",
         },

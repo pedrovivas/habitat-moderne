@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Bed, Bath, Maximize, Eye, EyeOff } from "lucide-react";
 import formatAddress from "./formatAddress";
+import API_URL from "./config";
 
 export default function Apartment({ apartment }) {
   const { t, i18n } = useTranslation();
@@ -19,7 +20,7 @@ export default function Apartment({ apartment }) {
         <img
           src={
             images[0]
-              ? `http://localhost:5000/uploads/${images[0]}`
+              ? `${API_URL}/uploads/${images[0]}`
               : "/placeholder.jpg"
           }
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

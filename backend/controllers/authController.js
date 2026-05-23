@@ -33,7 +33,7 @@ export const loginRequest = async (req, res) => {
 
     const code = Math.floor(100000 + Math.random() * 900000);
 
-    const expiresAt = Date.now() + 1 * 60 * 1000;
+    const expiresAt = Date.now() + 10 * 60 * 1000;
 
     codes[email] = {
       code,

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./ImageGallery.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
+import API_URL from "./config";
 import {
   Thumbs,
   FreeMode,
@@ -32,7 +33,7 @@ export default function ImageGallery({ apartment }) {
 
       // Map filenames to full URLs (assuming your backend is on port 5000)
       return imagesArray.map((img) =>
-        img.startsWith("http") ? img : `http://localhost:5000/uploads/${img}`,
+        img.startsWith("http") ? img : `${API_URL}/uploads/${img}`,
       );
     } catch {
       return ["/placeholder.jpg"]; // Fallback if parsing fails

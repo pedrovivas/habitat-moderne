@@ -1,6 +1,8 @@
+import API_URL from "../src/config.js";
+
 export const addApartment = async (formData) => {
-  
-  const res = await fetch("http://localhost:5000/api/apartments", {
+
+  const res = await fetch(`${API_URL}/api/apartments`, {
     method: "POST",
     body: formData,
   });
@@ -10,13 +12,13 @@ export const addApartment = async (formData) => {
 };
 
 const fetchApartments = async () => {
-  const res = await fetch("http://localhost:5000/api/apartments");
+  const res = await fetch(`${API_URL}/api/apartments`);
   if (!res.ok) throw new Error("Erreur récupération appartements");
   return res.json();
 };
 
 export const sendContactForm = async (formData) => {
-  const response = await fetch("http://localhost:5000/api/email", {
+  const response = await fetch(`${API_URL}/api/email`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
@@ -32,7 +34,7 @@ export const sendContactForm = async (formData) => {
 
 export const updateApartment = async (id, formData) => {
   
-  const res = await fetch(`http://localhost:5000/api/apartments/${id}`, {
+  const res = await fetch(`${API_URL}/api/apartments/${id}`, {
     method: "PUT",
     body: formData,
   });
