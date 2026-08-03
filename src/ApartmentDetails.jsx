@@ -251,6 +251,15 @@ export default function ApartmentDetails() {
                 </div>
               </div>
 
+              <div>
+                <span className="inline-block text-xs font-bold uppercase tracking-wider text-slate-500">
+                  {lang === "en" ? "Available" : "Disponible"}{" "}
+                  {(lang === "en" ? apartment.availability_en : apartment.availability_fr) ||
+                    apartment.availability ||
+                    (lang === "en" ? "now" : "maintenant")}
+                </span>
+              </div>
+
               {/* Specs */}
               <div className="flex justify-around py-6 border-y border-slate-200">
                 <div className="flex flex-col items-center text-slate-500 text-center gap-1">

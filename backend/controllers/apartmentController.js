@@ -86,7 +86,7 @@ export const updateApartment = async (req, res) => {
       tags: body.tags ? JSON.parse(body.tags) : [],
       customTags: body.customTags ? JSON.parse(body.customTags) : [],
       images: images,
-      visible: body.visible === "true" || body.visible === true ? 1 : 0,
+      visible: body.visible === "1" || body.visible === 1 || body.visible === true || body.visible === "true" ? 1 : 0,
       availability_fr: body.availability_fr,
       availability_en: body.availability_en,
     };
